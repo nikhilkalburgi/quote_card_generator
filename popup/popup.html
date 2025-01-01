@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' https://checkout.razorpay.com http://localhost:3000;">
+  <title>News Card Generator</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <button id="close-btn">❌</button>
+  <div class="container">
+    <h1>MAKE QUOTE CARD</h1>
+    <p class="tagline">Create and share quote cards instantly.</p>
+
+    <textarea id="userInput" class="userInput" placeholder="Put your text here!"></textarea>
+
+    <div id="card" class="card hidden">
+      <div id="loading" class="loading-container">
+        <div class="spinner"></div>
+      </div>
+      <div class="button-container">
+        <button id="edit-btn" class="btn edit-btn" title="Edit">&#9998;</button>   <!-- Edit Icon -->
+        <button id="reset-btn" class="btn reset-btn hidden" title="Reset">&#x21BA;</button> <!-- Reset Icon -->
+      </div>
+      <div id="cardContent" class="quote-card template1">
+        <div id="textContent" class="textContent">
+          <div class="profile">
+              <img class="profile-image" src="upload.jpg" id="profileImage">
+              <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+              <div class="profile-info">
+                  <p id="name" class="name"></p>
+                  <p id="designation" class="designation"></p>
+              </div>
+          </div>
+          <h1 id="quoteText"></h1>
+        </div>
+      </div>
+    
+      <div class="button-group">
+        <button id="openModal">Choose Template</button>
+        <button id="randomize">Randomize</button>
+      </div>
+
+      <div id="modal" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <h2>Select a Card Template</h2>
+          <div class="template-grid">
+            <div class="template-option template1" data-template="template1">
+              <div class="textContent">
+                <div class="profile">
+                  <span class="profile-image"></span>
+                  <div class="profile-info">
+                      <p class="name">Your Name</p>
+                      <p class="designation">Your Designation</p>
+                  </div>
+                </div>
+                <span style="display: inline-block; padding: 5px 10px;">Your Quote...</span>
+              </div>
+            </div>
+            <div class="template-option template2" data-template="template2">
+              <div class="textContent">
+                <div class="profile">
+                  <span class="profile-image"></span>
+                  <div class="profile-info">
+                      <p class="name">Your Name</p>
+                      <p class="designation">Your Designation</p>
+                  </div>
+                </div>
+                <span style="display: inline-block; padding: 5px 10px;">Your Quote...</span>
+              </div>
+            </div>
+            <div class="template-option template3" data-template="template3">
+              <div class="textContent">
+                <div class="profile">
+                  <span class="profile-image"></span>
+                  <div class="profile-info">
+                      <p class="name">Your Name</p>
+                      <p class="designation">Your Designation</p>
+                  </div>
+                </div>
+                <span style="display: inline-block; padding: 5px 10px;">Your Quote...</span>
+              </div>
+            </div>
+          </div>
+          <div class="dropdown">
+            <button class="dropdown-toggle" id="dropdownButton">Select a Background topic</button>
+            <div class="dropdown-menu" id="dropdownMenu">
+                <div class="dropdown-item" data-value="nature">Nature</div>
+                <div class="dropdown-item" data-value="tools">Tools</div>
+                <div class="dropdown-item" data-value="space">Universe</div>
+                <div class="dropdown-item" data-value="people">People</div>
+                <div class="dropdown-item" data-value="abstract">Abstract</div>
+                <div class="dropdown-item" data-value="animals">Animals</div>
+                <div class="dropdown-item" data-value="black">Black</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="cardOptions" class="card-selector hidden">
+      <div class="option">
+        <input type="radio" id="format1" name="cardFormat" value="format1" checked>
+        <span>1080 x 1080</span>
+      </div>
+      <div class="option">
+        <input type="radio" id="format2" name="cardFormat" value="format2">
+        <span>1080 x 1350</span>
+      </div>
+    </div>
+
+    <div id="quota" class="quota hidden">
+      <h2 id="lr-title">LIMIT REACHED</h2>
+      <p id="lr-description">You’ve reached your daily limit of 2 cards. Please try again tomorrow.</p>
+      <div class="upgrade-heading">
+        <h2>UPRADE TO PREMIUM</h2>
+        <p>Unlock unlimited card generation for the next 8 hours by upgrading for just <strong>₹10!</strong></p>
+      </div>
+      <div class="form-container">
+        <!-- Full Name Row -->
+        <div class="form-row">
+          <input type="text" id="fullName" placeholder="Full Name" />
+        </div>
+        <!-- Email and Contact Row -->
+        <div class="form-row">
+          <input type="email" id="email" placeholder="Email" />
+          <input type="text" id="contact" placeholder="Contact" />
+        </div>
+      </div>
+
+      <div id="payment" class="payment">
+        <div>
+          <div class="methods">
+            <img src="methods.webp" alt="payment methods" />
+          </div>
+          <button id="payButton">Pay ₹10.00</button>
+        </div>
+        <p id="statusMessage"></p>
+      </div>
+    </div>
+    <button id="generateCard">CREATE MY CARD!</button>
+    <button id="downloadCard" class="hidden">DOWNLOAD THE CARD</button>
+    <div id="upgradeComponent" class="upgrade-component">
+      <p>
+        Generate up to 2 news cards for FREE!
+      </p>
+      <p>
+        <a href="#" id="link" class="link">Upgrade</a> for just ₹10/- and enjoy unlimited access for the next 4 hours!
+      </p>
+    </div>
+  </div>
+  <script src="../razorpay/checkout.js"></script>
+  <script src="html2canvas.min.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
