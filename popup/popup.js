@@ -248,8 +248,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   const timeDifference = (currentTime - lastCheckTime) / (1000 * 60 * 60); // Convert milliseconds to hours
   const options = { hour: 'numeric', minute: '2-digit', hour12: true, day: 'numeric', month: 'short', year: 'numeric' };
 
-  if (timeDifference < 8 && usageData.unlimited) {
-    const expiryTime = new Date(new Date(usageData.date).getTime() + 8 * 60 * 60 * 1000).toLocaleString('en-US', options);
+  if (timeDifference < (usageData.expiry ?? 4) && usageData.unlimited) {
+    const expiryTime = new Date(new Date(usageData.date).getTime() + (usageData.expiry ?? 4) * 60 * 60 * 1000).toLocaleString('en-US', options);
     usageData.unlimited = false;
     upgradeComponent.children[0].innerHTML = '<strong>Thank you for upgrading!</strong>';
     upgradeComponent.children[1].innerHTML = `Your premium access will expire at <strong>${expiryTime}</strong>. <p style="font-size:14px; margin:0px; padding:0px;">Enjoy unlimited card generation until then!</p>`;
@@ -279,8 +279,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     titleElement.style.textTransform = state.fontType? state.fontType : titleElement.style.textTransform; 
     card.classList.remove('hidden');
     editContainer.classList.remove('hidden');
-    editButton.disabled = false;
     editButton.querySelector('img').src = 'images/edit.png';
+    editButton.disabled = false;
     loader.classList.add('hidden');
     cardContent.classList.remove('hidden');
     btnGroup.classList.remove('hidden');
@@ -483,6 +483,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const usageData = JSON.parse(localStorage.getItem('usage')) || {};
         usageData.date = today;
         usageData.unlimited = true; // Unlimited access flag
+        usageData.expiry = document.getElementById('pay1').checked ? 4 : 24;
         localStorage.setItem('usage', JSON.stringify(usageData));
         card.classList.add('hidden');
         quota.classList.add('hidden');
@@ -588,8 +589,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     btnGroup.classList.add('hidden');
     resetButton.classList.add('hidden');
     bgUpload.classList.add('hidden');
-    editButton.disabled = true;
     editButton.querySelector('img').src = 'images/edit_disabled.png';
+    editButton.disabled = true;
     editButton.style.background = '#f3f3f3';
   })
 
@@ -737,6 +738,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     .then(data => {
       const { advice } = data.slip;
       userInput.value = advice;
+    }).catch(err => {
+      userInput.value = 'Work in silence, let your work make the noise.';
     })
   })
 
@@ -751,17 +754,17 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 // Disable right-click
-// document.addEventListener("contextmenu", (event) => event.preventDefault());
+document.addEventListener("contextmenu", (event) => event.preventDefault());
 
-// // Disable specific keyboard shortcuts
-// document.addEventListener("keydown", (event) => {
-//   if (
-//     event.key === "F12" || // F12
-//     (event.ctrlKey && event.shiftKey && event.key === "I") || // Ctrl+Shift+I
-//     (event.ctrlKey && event.shiftKey && event.key === "J") || // Ctrl+Shift+J
-//     (event.ctrlKey && event.key === "U") // Ctrl+U (View Source)
-//   ) {
-//     event.preventDefault();
-//   }
-// });
+// Disable specific keyboard shortcuts
+document.addEventListener("keydown", (event) => {
+  if (
+    event.key === "F12" || // F12
+    (event.ctrlKey && event.shiftKey && event.key === "I") || // Ctrl+Shift+I
+    (event.ctrlKey && event.shiftKey && event.key === "J") || // Ctrl+Shift+J
+    (event.ctrlKey && event.key === "U") // Ctrl+U (View Source)
+  ) {
+    event.preventDefault();
+  }
+});
 

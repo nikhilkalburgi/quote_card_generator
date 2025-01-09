@@ -1004,28 +1004,6 @@ button img {
   overflow: hidden;
   position: relative;
 }
-.template12 .profile::before {
-  content: "";
-  position: absolute;
-  height: 100%;
-  transform: rotate(45deg);
-  width: 10%;
-  top: -30%;
-  right: 91%;
-  background-color: aliceblue;
-  z-index: 0;
-}
-.template12 .profile::after {
-  content: "";
-  position: absolute;
-  height: 100%;
-  transform: rotate(45deg);
-  width: 10%;
-  bottom: -30%;
-  left: 91%;
-  background-color: aliceblue;
-  z-index: 0;
-}
 
 /* drop down btn in model */
 .dropdown-grid {
