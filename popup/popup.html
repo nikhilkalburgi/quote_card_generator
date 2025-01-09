@@ -10,25 +10,34 @@
 <body>
   <button id="close-btn">❌</button>
   <div class="container">
-    <h1 style="background-image: url(header.png); background-repeat: no-repeat; background-size: contain; width: 30%; height: 40px; margin-inline: auto;"></h1>
+    <h1 style="background-image: url(images/header.png); background-repeat: no-repeat; background-size: contain; width: 30%; height: 40px; margin-inline: auto;"></h1>
     <p class="tagline">Create and share quote cards instantly.</p>
-    <span id="randomQuoteBtn">Random Quote</span>
     <textarea id="userInput" class="userInput" placeholder="Put your text here!"></textarea>
+    <button id="randomQuoteBtn" class="light-background">Random Quote</button>
 
     <div id="editContainer" class="button-container hidden">
-      <button id="edit-btn" class="btn edit-btn" title="Edit"><img src="edit.png" width="100%" height="100%"/></button>   <!-- Edit Icon -->
-      <button id="reset-btn" class="btn reset-btn hidden" title="Reset">&#x21BA;</button> <!-- Reset Icon -->
-      <div id="home-btn" class="home-btn-wrapper"><div class="home-btn"><img src="home.png" width="100%" height="100%"/></div></div>
+      <button id="edit-btn" class="btn edit-btn" title="Edit" style="display: flex; justify-content: center; align-items: center;"><img src="images/edit.png" width="100%" height="100%" style="width: 15px; height: 15px;"/></button>   <!-- Edit Icon -->
+      <button id="reset-btn" class="btn reset-btn hidden" title="Reset" style="opacity: 0;">&#x21BA;</button> <!-- Reset Icon -->
+      <button id="bg-change-btn" class="btn edit-btn hidden" title="Change Background" style="opacity: 0;">
+        <img width="100%" src="images/upload.webp">
+        <input type="file" id="bgUpload" accept="image/*" style="display: none;">
+      </button>
+      <div id="home-btn" class="home-btn-wrapper" title="Home"><div class="home-btn"><img src="images/home.png" width="100%" height="100%"/></div></div>
     </div>
     <div id="card" class="card hidden">
       <div id="loading" class="loading-container">
         <div class="spinner"></div>
       </div>
-      <div style="border-radius: 15px; width: 390px; margin: auto; height: 390px; overflow: hidden; padding: 0px; display: flex;justify-content: center; align-items: center;">
-        <div id="cardContent" class="quote-card template1">
+      <div id="cardContentParent" style="border-radius: 15px; width: 360px; margin: auto; height: 360px; overflow: hidden; padding: 0px; display: flex;justify-content: center; align-items: center;">
+        <div id="cardContent" class="quote-card template1" style="position: relative;">
+          <div style="width: 100%; height: 100%; position: absolute; top: 0px; left: 0px; z-index: 0; overflow: hidden; display: flex; align-items: center; justify-content: center; padding: 0px; margin: 0px;">
+            <img src="templates/template1.png" height="100%"/>
+          </div>
           <div id="textContent" class="textContent">
             <div class="profile">
-                <img class="profile-image" src="upload.jpg" id="profileImage">
+              <div class="profile-image">
+                <img  src="images/profile.png" id="profileImage" height="100%">
+              </div>
                 <input type="file" id="imageUpload" accept="image/*" style="display: none;">
                 <div class="profile-info">
                     <p id="name" class="name"></p>
@@ -39,242 +48,165 @@
           </div>
         </div>
       </div>
+      <p style="text-align: end; color: #A9A9A9; width: 83%; margin: 3px;">
+        Image size 1080 x 1080
+      </p>
 
       <div id="modal" class="modal">
         <div class="modal-content">
           <span class="close">&times;</span>
           <h2>Select a Card Template</h2>
           <div class="template-grid">
-            <div class="template-option template1" data-template="template1"  style="background-image: url(default.webp); background-position: center; background-repeat: no-repeat; background-size: cover;">
+            <div class="template-option template1" data-template="template1">
               <div class="textContent">
                 <div class="profile">
                   <span class="profile-image"></span>
                   <div class="profile-info">
-                      <p class="name">Your Name</p>
-                      <p class="designation">Your Designation</p>
+                      <p class="name">Akhilesh</p>
+                      <p class="designation">Founder at QuoteMaker</p>
                   </div>
                 </div>
-                <span style="display: inline-block; padding: 5px 10px;">Your Quote...</span>
+                <span style="display: inline-block; padding: 2px 10px; font-size: smaller;">Your Quote...</span>
               </div>
             </div>
-            <div class="template-option template2" data-template="template2"  style="background-image: url(default.webp); background-position: center; background-repeat: no-repeat; background-size: cover;">
+            <div class="template-option template2" data-template="template2">
               <div class="textContent">
                 <div class="profile">
                   <span class="profile-image"></span>
                   <div class="profile-info">
-                      <p class="name">Your Name</p>
-                      <p class="designation">Your Designation</p>
+                      <p class="name">Akhilesh</p>
+                      <p class="designation">Founder at QuoteMaker</p>
                   </div>
                 </div>
-                <span style="display: inline-block; padding: 5px 10px;">Your Quote...</span>
+                <span style="display: inline-block; padding: 2px 10px; font-size: smaller;">Your Quote...</span>
               </div>
             </div>
-            <div class="template-option template3" data-template="template3"  style="background-image: url(default.webp); background-position: center; background-repeat: no-repeat; background-size: cover;">
+            <div class="template-option template3" data-template="template3">
               <div class="textContent">
                 <div class="profile">
                   <span class="profile-image"></span>
                   <div class="profile-info">
-                      <p class="name">Your Name</p>
-                      <p class="designation">Your Designation</p>
+                      <p class="name">Akhilesh</p>
+                      <p class="designation">Founder at QuoteMaker</p>
                   </div>
                 </div>
-                <span style="display: inline-block; padding: 5px 10px;">Your Quote...</span>
+                <span style="display: inline-block; padding: 2px 10px; font-size: smaller;">Your Quote...</span>
               </div>
             </div>
-            <div class="template-option template4" data-template="template4"  style="background-image: url(default.webp); background-position: center; background-repeat: no-repeat; background-size: cover;">
+            <div class="template-option template4" data-template="template4">
+              <div class="textContent">
+                <div class="profile">
+                  <span class="profile-image"></span>
+                  <div class="profile-info">
+                      <p class="name">Akhilesh</p>
+                      <p class="designation">Founder at QuoteMaker</p>
+                  </div>
+                </div>
+                <span style="display: inline-block; padding: 2px 10px; font-size: smaller;">Your Quote...</span>
+              </div>
+            </div>
+            <div class="template-option template5" data-template="template5">
+              <div class="textContent" >
+                <div class="profile">
+                  <span class="profile-image"></span>
+                  <div class="profile-info">
+                      <p class="name">Akhilesh</p>
+                      <p class="designation">Founder at QuoteMaker</p>
+                  </div>
+                </div>
+                <span style="display: inline-block; padding: 2px 10px; font-size: smaller;">Your Quote...</span>
+              </div>
+            </div>
+            <div class="template-option template6" data-template="template6">
+              <div class="textContent" >
+                <div class="profile">
+                  <span class="profile-image"></span>
+                  <div class="profile-info">
+                      <p class="name">Akhilesh</p>
+                      <p class="designation">Founder at QuoteMaker</p>
+                  </div>
+                </div>
+                <span style="display: inline-block; padding: 2px 10px; font-size: smaller;">Your Quote...</span>
+              </div>
+            </div>
+            <div class="template-option template7" data-template="template7">
+              <div class="textContent" >
+                <div class="profile">
+                  <span class="profile-image"></span>
+                  <div class="profile-info">
+                      <p class="name">Akhilesh</p>
+                      <p class="designation">Founder at QuoteMaker</p>
+                  </div>
+                </div>
+                <span style="display: inline-block; padding: 2px 10px; font-size: smaller;">Your Quote...</span>
+              </div>
+            </div>
+            <div class="template-option template8" data-template="template8">
+              <div class="textContent" >
+                <div class="profile">
+                  <span class="profile-image"></span>
+                  <div class="profile-info">
+                      <p class="name">Akhilesh</p>
+                      <p class="designation">Founder at QuoteMaker</p>
+                  </div>
+                </div>
+                <span style="display: inline-block; padding: 2px 10px; font-size: smaller;">Your Quote...</span>
+              </div>
+            </div>
+            <div class="template-option template9" data-template="template9">
               <div class="textContent">
                   <div class="profile">
                       <div class="profile-info">
-                          <p class="name">Your Name</p>
+                          <p class="name">Akhilesh</p>
                       </div>
                   </div>
-                  <span style="display: inline-block; padding: 5px 10px;">Your Quote...</span>
+                  <span style="display: inline-block; padding: 25px 10px; font-size: smaller;">Your Quote...</span>
               </div>
             </div>
-            <div class="template-option template5" data-template="template5"  style="background-image: url(default.webp); background-position: center; background-repeat: no-repeat; background-size: cover;">
-              <div class="textContent" style="width: 85%; height: 100%; border-radius: 5px;">
+            <div class="template-option template10" data-template="template10">
+              <div class="textContent" >
                 <div class="profile">
                   <span class="profile-image"></span>
                   <div class="profile-info">
-                      <p class="name">Your Name</p>
-                      <p class="designation">Your Designation</p>
+                      <p class="name">Akhilesh</p>
+                      <p class="designation">Founder at QuoteMaker</p>
                   </div>
                 </div>
-                <span style="display: inline-block; padding: 5px 10px;">Your Quote...</span>
-              </div>
-            </div>
-            <div class="template-option template6" data-template="template6"  style="background-image: url(default.webp); background-position: center; background-repeat: no-repeat; background-size: cover;">
-              <div class="textContent" style="width: 85%; height: 100%; border-radius: 5px;">
-                <div class="profile">
-                  <span class="profile-image"></span>
-                  <div class="profile-info">
-                      <p class="name">Your Name</p>
-                      <p class="designation">Your Designation</p>
-                  </div>
-                </div>
-                <span style="display: inline-block; padding: 5px 10px;">Your Quote...</span>
-              </div>
-            </div>
-            <div class="template-option template7" data-template="template7"  style="background-image: url(default.webp); background-position: center; background-repeat: no-repeat; background-size: cover;">
-              <div class="textContent" style="width: 85%; height: 100%; border-radius: 5px;">
-                <div class="profile">
-                  <span class="profile-image"></span>
-                  <div class="profile-info">
-                      <p class="name">Your Name</p>
-                      <p class="designation">Your Designation</p>
-                  </div>
-                </div>
-                <span style="display: inline-block; padding: 5px 10px;">Your Quote...</span>
-              </div>
-            </div>
-            <div class="template-option template8" data-template="template8" style="background-image: url(default.webp); background-position: center; background-repeat: no-repeat; background-size: cover;">
-              <div class="textContent" style="width: 85%; height: 100%; border-radius: 5px;">
-                <div class="profile">
-                  <span class="profile-image"></span>
-                  <div class="profile-info">
-                      <p class="name">Your Name</p>
-                      <p class="designation">Your Designation</p>
-                  </div>
-                </div>
-                <span style="display: inline-block; padding: 5px 10px;">Your Quote...</span>
-              </div>
-            </div>
-            <div class="template-option template9" data-template="template9" style="background-image: url(default.webp); background-position: center; background-repeat: no-repeat; background-size: cover;">
-              <div class="textContent">
-                  <div class="profile">
-                      <div class="profile-info">
-                          <p class="name">Your Name</p>
-                      </div>
-                  </div>
-                  <span style="display: inline-block; padding: 5px 10px; font-size: large;">Your Quote...</span>
-              </div>
-            </div>
-            <div class="template-option template10" data-template="template10" style="background-image: url(default.webp); background-position: center; background-repeat: no-repeat; background-size: cover; color: #fff;">
-              <div class="textContent" style="width: 85%; height: 100%; border-radius: 5px;">
-                <div class="profile">
-                  <span class="profile-image"></span>
-                  <div class="profile-info">
-                      <p class="name">Your Name</p>
-                      <p class="designation">Your Designation</p>
-                  </div>
-                </div>
-                <span style="display: inline-block; padding: 5px 10px;">Your Quote...</span>
+                <span style="display: inline-block; padding: 2px 10px; font-size: smaller;">Your Quote...</span>
               </div>
             </div>
             <div class="template-option template11" data-template="template11">
-              <div class="textContent" style="width: 85%; height: 100%; border-radius: 5px;">
+              <div class="textContent" >
                 <div class="profile">
                   <span class="profile-image"></span>
                   <div class="profile-info">
-                      <p class="name">Your Name</p>
-                      <p class="designation">Your Designation</p>
+                      <p class="name">Akhilesh</p>
+                      <p class="designation">Founder at QuoteMaker</p>
                   </div>
                 </div>
-                <span style="display: inline-block; padding: 5px 10px;">Your Quote...</span>
+                <span style="display: inline-block; padding: 2px 10px; font-size: smaller;">Your Quote...</span>
               </div>
             </div>
-            <div class="template-option template12" data-template="template12"  style="background-image: url(default.webp); background-position: center; background-repeat: no-repeat; background-size: cover;">
+            <div class="template-option template12" data-template="template12">
               <div class="textContent">
                 <div class="profile">
                   <span class="profile-image"></span>
                   <div class="profile-info">
-                      <p class="name">Your Name</p>
-                      <p class="designation">Your Designation</p>
+                      <p class="name">Akhilesh</p>
+                      <p class="designation">Founder at QuoteMaker</p>
                   </div>
                 </div>
-                <span style="display: inline-block; padding: 5px 10px;">Your Quote...</span>
+                <span style="display: inline-block; padding: 2px 10px; font-size: smaller;">Your Quote...</span>
               </div>
             </div>
           </div>
-          <div class="dropdown-grid">
-            <div class="dropdown">
-                <label class="dropdown-label" for="dropdownButton1">Background Topic</label>
-                <button class="dropdown-toggle" id="dropdownButton1">Nature</button>
-                <div class="dropdown-menu" id="dropdownMenu1">
-                    <div class="dropdown-item" data-value="nature">Nature</div>
-                    <div class="dropdown-item" data-value="tools">Tools</div>
-                    <div class="dropdown-item" data-value="space">Universe</div>
-                    <div class="dropdown-item" data-value="people">People</div>
-                    <div class="dropdown-item" data-value="abstract">Abstract</div>
-                    <div class="dropdown-item" data-value="animals">Animals</div>
-                    <div class="dropdown-item" data-value="black">Black</div>
-                </div>
-            </div>
-            <div class="dropdown">
-                <label class="dropdown-label" for="dropdownButton2">Font Size</label>
-                <button class="dropdown-toggle" id="dropdownButton2">Large</button>
-                <div class="dropdown-menu" id="dropdownMenu2">
-                    <div class="dropdown-item" data-value="small">Small</div>
-                    <div class="dropdown-item" data-value="medium">Medium</div>
-                    <div class="dropdown-item" data-value="large">Large</div>
-                    <div class="dropdown-item" data-value="x-large">X-Large</div>
-                    <div class="dropdown-item" data-value="xx-large">XX-Large</div>
-                    <div class="dropdown-item" data-value="x-small">X-Small</div>
-                    <div class="dropdown-item" data-value="xx-small">XX-Small</div>
-                </div>
-            </div>
-            <div class="dropdown">
-                <label class="dropdown-label" for="dropdownButton3">Text Align</label>
-                <button class="dropdown-toggle" id="dropdownButton3">Left</button>
-                <div class="dropdown-menu" id="dropdownMenu3">
-                    <div class="dropdown-item" data-value="left">Left</div>
-                    <div class="dropdown-item" data-value="center">Center</div>
-                    <div class="dropdown-item" data-value="right">Right</div>
-                </div>
-            </div>
-            <div class="dropdown">
-                <label class="dropdown-label" for="dropdownButton4">Font Family</label>
-                <button class="dropdown-toggle" id="dropdownButton4">Arial</button>
-                <div class="dropdown-menu" id="dropdownMenu4">
-                    <div class="dropdown-item" data-value="arial">Arial</div>
-                    <div class="dropdown-item" data-value="times">Times New Roman</div>
-                    <div class="dropdown-item" data-value="courier">Courier New</div>
-                    <div class="dropdown-item" data-value="georgia">Georgia</div>
-                    <div class="dropdown-item" data-value="verdana">Verdana</div>
-                    <div class="dropdown-item" data-value="tahoma">Tahoma</div>
-                    <div class="dropdown-item" data-value="trebuchet">Trebuchet MS</div>
-                    <div class="dropdown-item" data-value="impact">Impact</div>
-                    <div class="dropdown-item" data-value="comic">Comic Sans MS</div>
-                    <div class="dropdown-item" data-value="helvetica">Helvetica</div>
-                    <div class="dropdown-item" data-value="sans-serif">Sans Serif</div>
-                    <div class="dropdown-item" data-value="cursive">Cursive</div>
-                    <div class="dropdown-item" data-value="monospace">Monospace</div>
-                </div>
-            </div>
-            <div class="dropdown">
-              <label class="dropdown-label" for="colorPicker">Font Color</label>
-              <input type="color" id="colorPicker" value="#000000" style="width: 94%; height: 30px; border: 0.5px solid #267ff3; border-radius: 5px; cursor: pointer; padding: 1px 3px;">
-            </div>
-            <div class="dropdown">
-              <label class="dropdown-label" for="dropdownButton5">Font Type</label>
-              <button class="dropdown-toggle" id="dropdownButton5">None</button>
-              <div class="dropdown-menu" id="dropdownMenu5">
-                  <div class="dropdown-item" data-value="capitalize">Capitalize</div>
-                  <div class="dropdown-item" data-value="uppercase">Uppercase</div>
-                  <div class="dropdown-item" data-value="lowercase">LowerCase</div>
-                  <div class="dropdown-item" data-value="none">None</div>
-              </div>
-            </div>
-          </div>
-          <p style="opacity: 0.5; text-align: center; margin-bottom: 0px;">Choose the typography and close the tab.</p>
         </div>
-      </div>
-    </div>
-
-    <div id="cardOptions" class="card-selector hidden">
-      <div class="option">
-        <input type="radio" id="format1" name="cardFormat" value="format1" checked>
-        <span>1080 x 1080</span>
-      </div>
-      <div class="option">
-        <input type="radio" id="format2" name="cardFormat" value="format2">
-        <span>1080 x 1350</span>
       </div>
     </div>
 
     <div id="quota" class="quota hidden">
       <h2 id="lr-title">LIMIT REACHED</h2>
-      <p id="lr-description">You’ve reached your daily limit of 2 cards. Please try again tomorrow.</p>
+      <p id="lr-description">You’ve reached your <strong>daily limit</strong> of 2 cards. Please try again tomorrow.</p>
       <div class="upgrade-heading">
         <h2>UPRADE TO PREMIUM</h2>
         <p id="showAmt">Unlock unlimited card generation for the next 4 hours by upgrading for just <strong >₹20!</strong></p>
@@ -294,7 +226,7 @@
       <div id="payment" class="payment">
         <div>
           <div class="methods">
-            <img src="methods.jpeg" alt="payment methods" />
+            <img src="images/methods.jpeg" alt="payment methods" />
           </div>
           <button id="payButton">Pay ₹20.00</button>
         </div>
@@ -305,7 +237,7 @@
           </div>
           <div class="option">
             <input type="radio" id="pay2" name="cardFormat" value="pay2">
-            <span style="display: flex; flex-direction: column; font-size: larger;"><b>1 DAY</b><span>₹100.00</span></span>
+            <span style="display: flex; flex-direction: column; font-size: larger;"><b>24 HOURS</b><span>₹100.00</span></span>
           </div>
         </div>
         <p id="statusMessage"></p>
@@ -313,20 +245,110 @@
     </div>
     <button id="generateCard">CREATE MY CARD!</button>
     <div id="btnGroup" class="button-group hidden">
-      <button id="openModal" class="light-background">Browse Template <img src="template.png"/></button>
-      <button id="randomize" class="light-background">Randomize <img src="randomize.png"/></button>
+      <div class="dropdown-grid">
+        <div class="dropdown">
+            <label class="dropdown-label" for="dropdownButton1">Background Topic</label>
+            <button class="dropdown-toggle" id="dropdownButton1"></button>
+            <div class="dropdown-menu" id="dropdownMenu1">
+                <div class="dropdown-item" data-value="nature">Nature</div>
+                <div class="dropdown-item" data-value="tools">Tools</div>
+                <div class="dropdown-item" data-value="space">Universe</div>
+                <div class="dropdown-item" data-value="people">People</div>
+                <div class="dropdown-item" data-value="abstract">Abstract</div>
+                <div class="dropdown-item" data-value="animals">Animals</div>
+                <div class="dropdown-item" data-value="black">Black</div>
+            </div>
+        </div>
+        <div class="dropdown">
+            <label class="dropdown-label" for="dropdownButton2">Font Size</label>
+            <button class="dropdown-toggle" id="dropdownButton2"></button>
+            <div class="dropdown-menu" id="dropdownMenu2">
+                <div class="dropdown-item" data-value="small">Small</div>
+                <div class="dropdown-item" data-value="medium">Medium</div>
+                <div class="dropdown-item" data-value="large">Large</div>
+                <div class="dropdown-item" data-value="x-large">X-Large</div>
+                <div class="dropdown-item" data-value="xx-large">XX-Large</div>
+                <div class="dropdown-item" data-value="x-small">X-Small</div>
+                <div class="dropdown-item" data-value="xx-small">XX-Small</div>
+            </div>
+        </div>
+        <div class="dropdown">
+            <label class="dropdown-label" for="dropdownButton3">Text Align</label>
+            <button class="dropdown-toggle" id="dropdownButton3"></button>
+            <div class="dropdown-menu" id="dropdownMenu3">
+                <div class="dropdown-item" data-value="left">Left</div>
+                <div class="dropdown-item" data-value="center">Center</div>
+                <div class="dropdown-item" data-value="right">Right</div>
+            </div>
+        </div>
+        <div class="dropdown">
+            <label class="dropdown-label" for="dropdownButton4">Font Family</label>
+            <button class="dropdown-toggle" id="dropdownButton4"></button>
+            <div class="dropdown-menu" id="dropdownMenu4">
+              <div class="dropdown-item" data-value="arial">Arial</div>
+              <div class="dropdown-item" data-value="Atma">Atma</div>
+              <div class="dropdown-item" data-value="Barel">Barel</div>
+              <div class="dropdown-item" data-value="comic">Comic Sans MS</div>
+              <div class="dropdown-item" data-value="courier">Courier New</div>
+              <div class="dropdown-item" data-value="cursive">Cursive</div>
+              <div class="dropdown-item" data-value="Delius">Delius</div>
+              <div class="dropdown-item" data-value="DynaPuff">DynaPuff</div>
+              <div class="dropdown-item" data-value="georgia">Georgia</div>
+              <div class="dropdown-item" data-value="helvetica">Helvetica</div>
+              <div class="dropdown-item" data-value="Iceberg">Iceberg</div>
+              <div class="dropdown-item" data-value="impact">Impact</div>
+              <div class="dropdown-item" data-value="IndieFlower">IndieFlower</div>
+              <div class="dropdown-item" data-value="Inter">Inter</div>
+              <div class="dropdown-item" data-value="Kanit">Kanit</div>
+              <div class="dropdown-item" data-value="Karla">Karla</div>
+              <div class="dropdown-item" data-value="monospace">Monospace</div>
+              <div class="dropdown-item" data-value="PlaywriteAUSA">PlaywriteAUSA</div>
+              <div class="dropdown-item" data-value="Rasa">Rasa</div>
+              <div class="dropdown-item" data-value="Roboto">Roboto</div>
+              <div class="dropdown-item" data-value="RubikVinyl">RubikVinyl</div>
+              <div class="dropdown-item" data-value="sans-serif">Sans Serif</div>
+              <div class="dropdown-item" data-value="SchoolBell">SchoolBell</div>
+              <div class="dropdown-item" data-value="tahoma">Tahoma</div>
+              <div class="dropdown-item" data-value="Tenali">Tenali</div>
+              <div class="dropdown-item" data-value="times">Times New Roman</div>
+              <div class="dropdown-item" data-value="Tomorrow">Tomorrow</div>
+              <div class="dropdown-item" data-value="trebuchet">Trebuchet MS</div>
+              <div class="dropdown-item" data-value="UbuntuMono">Ubuntu</div>
+              <div class="dropdown-item" data-value="verdana">Verdana</div>
+              <div class="dropdown-item" data-value="Wallpoet">Wallpoet</div>
+            </div>
+        </div>
+        <div class="dropdown">
+          <label class="dropdown-label" for="colorPicker">Font Color</label>
+          <input type="color" id="colorPicker" value="#000000" style="width: 94%; height: 30px; border: 0.5px solid #267ff3; border-radius: 5px; cursor: pointer; padding: 1px 3px;">
+        </div>
+        <div class="dropdown">
+          <label class="dropdown-label" for="dropdownButton5">Font Type</label>
+          <button class="dropdown-toggle" id="dropdownButton5"></button>
+          <div class="dropdown-menu" id="dropdownMenu5">
+              <div class="dropdown-item" data-value="capitalize">Capitalize</div>
+              <div class="dropdown-item" data-value="uppercase">Uppercase</div>
+              <div class="dropdown-item" data-value="lowercase">LowerCase</div>
+              <div class="dropdown-item" data-value="none">None</div>
+          </div>
+        </div>
+      </div>
+      <div style="display: flex; justify-content: space-around; margin-top: 10px; width: 98%; margin-inline: auto;">
+        <button id="openModal" class="light-background" style="padding: 0px; width: 30%; display: flex; justify-content: center; align-items: center;" title="Browse Template"><img src="images/template.png"/></button>
+        <button id="randomize" class="light-background" style="padding: 0px; width: 30%; margin-inline: 10px; display: flex; justify-content: center; align-items: center;" title="Randomize"><img src="images/randomize.png"/></button>
+        <button id="downloadCard" class="hidden">DOWNLOAD<img src="images/download.png" style="    width: 15px; margin-top: 2px;"/></button>
+      </div>
     </div>
-    <button id="downloadCard" class="hidden">DOWNLOAD THE CARD <img src="download.png"/></button>
     <div id="upgradeComponent" class="upgrade-component">
       <p>
-        Generate up to 2 news cards for FREE!
+        Generate up to 2 news cards for <strong>FREE!</strong>
       </p>
       <p>
         <a href="#" id="link" class="link">Upgrade</a> for just ₹20/- and enjoy unlimited access for the next 4 hours!
       </p>
     </div>
     
-    <p style="font-size: 15px; opacity: 0.4;">By <u><strong>KreativeByte</strong></u></p>
+    <p style="font-size: 11px; opacity: 0.4;">By <u><strong>KreativeByte</strong></u></p>
   </div>
   <script src="../razorpay/checkout.js"></script>
   <script src="html2canvas.min.js"></script>

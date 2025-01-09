@@ -1,5 +1,94 @@
 /* General Styles */
 
+@font-face {
+  font-family: 'Atma';
+  src: url('./fonts/Atma-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'UbuntuMono';
+  src: url('./fonts/UbuntuMono-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Borel';
+  src: url('./fonts/Borel-Regular.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Delius';
+  src: url('./fonts/Delius-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('./fonts/Inter-VariableFont_opsz\,wght.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Kanit';
+  src: url('./fonts/Kanit-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Karla';
+  src: url('./fonts/Karla-VariableFont_wght.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'PlaywriteAUSA';
+  src: url('./fonts/PlaywriteAUSA-VariableFont_wght.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Rasa';
+  src: url('./fonts/Rasa-VariableFont_wght.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'RubikVinyl';
+  src: url('./fonts/RubikVinyl-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Schoolbell';
+  src: url('./fonts/Schoolbell-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'DynaPuff';
+  src: url('./fonts/DynaPuff-VariableFont_wdth\,wght.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Iceberg';
+  src: url('./fonts/Iceberg-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Tenali';
+  src: url('./fonts/TenaliRamakrishna-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Tomorrow';
+  src: url('./fonts/Tomorrow-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Wallpoet';
+  src: url('./fonts/Wallpoet-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'IndieFlower';
+  src: url('./fonts/IndieFlower-Regular.ttf') format('truetype');
+}
+
 body {
   font-family: 'Arial', sans-serif;
   margin: 0;
@@ -60,7 +149,7 @@ iframe {
 
 .card-selector {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   margin-top: 10px;
 }
 .option {
@@ -68,7 +157,7 @@ iframe {
 }
 .option > span {
   padding-top: 2px;
-  font-size: 16px;
+  font-size: 15px;
 }
 
 input[type="radio"] {
@@ -138,7 +227,7 @@ button:hover {
   text-align: left;
   position: relative;
   overflow: visible;
-  margin-top: 40px;
+  margin-block: 0px;
 }
 
 .card h1, .card p {
@@ -196,7 +285,7 @@ p#source {
 
 .upgrade-component p:last-child {
   border-radius: 10px;
-  background-color: #E9F2FE;
+  background-color: #f8f8f8;
   padding: 20px;
 }
 
@@ -325,6 +414,7 @@ button#payButton {
   background-color: #fededb;
   color: #267ff3;
   text-shadow: none;
+  transition: opacity 0.3s;
 }
 
 .reset-btn:hover {
@@ -336,6 +426,7 @@ button#payButton {
   color: #267ff3;
   text-shadow: none;
   border: none;
+  transition: opacity 0.3s;
 }
 
 .edit-btn:hover, .home-btn-wrapper:hover {
@@ -396,19 +487,18 @@ button#payButton {
   background-color: #fff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  width: 350px;
-  height: 350px;
+  width: 320px;
+  height: 320px;
   position: relative;
   margin-bottom: 20px;
   transition: all 0.3s;
   margin: auto;
   margin-block: 10px;
-  background-image: url('default.webp');
+  background-image: url('images/default.png');
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
   border-radius: 0px;
-  border: 1px solid #cececed8;
   outline: 0px;
   font-family: Arial, Helvetica, sans-serif;
   overflow: hidden;
@@ -417,7 +507,6 @@ button#payButton {
 #quoteText {
   font-size: large;
   font-weight: bold;
-  padding-block: 15px;
   padding-inline: 10px;
   max-width: 310px;
   max-height: 150px;
@@ -425,6 +514,8 @@ button#payButton {
   word-wrap: break-word;
   margin-inline: auto;
   text-align: left;
+  outline: 0px;
+  width: 85%;
 }
 
 .profile-image {
@@ -432,9 +523,11 @@ button#payButton {
   height: 25px;
   border-radius: 50%;
   margin-right: 10px;
-  border: 1px solid;
   overflow: hidden;
   cursor: pointer;
+  object-fit: cover;
+  object-position: center;
+  background-color: #fff;
 }
 
 .profile-info {
@@ -452,6 +545,7 @@ button#payButton {
   padding: 0!important;
   max-height: 35px;
   white-space: nowrap;
+  outline: 0px;
 }
 
 .designation {
@@ -465,6 +559,7 @@ button#payButton {
   padding-bottom: 5px;
   white-space: nowrap;
   margin-top: 5px;
+  outline: 0px;
 }
 
 .modal {
@@ -502,7 +597,7 @@ button#payButton {
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
   margin-top: 20px;
-  max-height: 300px;
+  max-height: 400px;
   overflow: auto;
 }
 
@@ -511,7 +606,7 @@ button#payButton {
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s;
-  height: 150px;
+  height: 110px;
   position: relative;
   padding: 11px;
   width: 110px;
@@ -532,17 +627,17 @@ button#payButton {
   margin-top: 2px;
 }
 .template-option .profile .profile-image{
-  width: 20px;
-  height: 20px;
+  width: 15px;
+  height: 15px;
   border-radius: 50%;
-  margin-right: 10px;
+  margin-right: 5px;
   background-color: #aaa;
 }
 
 .button-group {
-  display: flex;
+  display: block;
   justify-content: space-around;
-  width: 87%;
+  width: 83%;
   margin-inline: auto;
   margin-top: 10px;
 }
@@ -566,17 +661,21 @@ button img {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  background-image: url(templates/template1.png); background-position: center; background-repeat: no-repeat; background-size: cover;
 }
 .template1 .profile {
   display: flex;
   align-items: center;
-  padding: 5px 10px;
+  margin: 0px auto;
+  width: 85%;
 }
 .template1 .textContent {
-  border-radius: 15px;
-  background: #ffffffd6;
+  border-radius: 6px;
+  background: #fff;
   max-height: 345px;
   overflow: hidden;
+  box-shadow: 2px 2px 5px #737373;
+  position: relative;
 }
 
 .template2 {
@@ -586,17 +685,21 @@ button img {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  background-image: url(templates/template2.png); background-position: center; background-repeat: no-repeat; background-size: cover;
 }
 .template2 .profile {
   display: flex;
   align-items: center;
-  padding: 5px 10px;
+  margin: 0px auto;
+  width: 85%;
 }
 .template2 .textContent {
-  border-radius: 15px;
-  background: #ffffffd6;
+  border-radius: 6px;
+  background: #fff;
   max-height: 345px;
   overflow: hidden;
+  box-shadow: 2px 2px 5px #737373;
+  position: relative;
 }
 
 .template3 {
@@ -606,17 +709,21 @@ button img {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+  background-image: url(templates/template3.png); background-position: center; background-repeat: no-repeat; background-size: cover;
 }
 .template3 .profile {
   display: flex;
   align-items: center;
-  padding: 5px 10px;
+  margin: 0px auto;
+  width: 85%;
 }
 .template3 .textContent {
-  border-radius: 15px;
-  background: #ffffffd6;
+  border-radius: 6px;
+  background: #fff;
   max-height: 345px;
   overflow: hidden;
+  box-shadow: 2px 2px 5px #737373;
+  position: relative;
 }
 
 .template4 {
@@ -625,36 +732,23 @@ button img {
   text-align: left;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  color: #6a1b9a;
+  justify-content: flex-end;
+  color: #282828;
+  background-image: url(templates/template4.png); background-position: center; background-repeat: no-repeat; background-size: cover;
 }
 .template4 .profile {
   display: flex;
   align-items: center;
-  padding: 10px;
-  position: absolute;
-  bottom: 10px;
-  right: 20px;
+  margin: 0px auto;
+  width: 85%;
 }
 .template4 .textContent {
-  border-radius: 20px;
-  padding: 25px;
+  border-radius: 6px;
+  background: #ffffffc9;
   max-height: 345px;
-  text-shadow: 0px -1px 1px #fff, 0px -1px 0px #fff;
   overflow: hidden;
-  letter-spacing: 2px;
-  padding-top: 0px;
-}
-.template4 #quoteText {
-  font-size: xx-large;
-  max-height: 220px!important;
-  letter-spacing: 5px;
-}
-.template4 #profileImage, .template4 #imageUpload, .template4 .designation {
-  display: none;
-}
-.template4 .name{
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family: cursive;
+  position: relative;
 }
 
 .template5 {
@@ -664,24 +758,25 @@ button img {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  background-image: url(templates/template1.png); background-position: center; background-repeat: no-repeat; background-size: cover;
 }
 .template5 .profile {
   display: flex;
   align-items: center;
-  padding: 5px 10px;
+  margin: 0px auto; 
+  width: 85%;
 }
 .template5 .textContent {
-  width: 370px;
-  height: 390px;
+  width: 100%;
+  height: 100%;
   position: absolute;
   top: 0px;
   left: 0px;
   border-radius: 0px;
-  background-color: #f19a259e;
+  background-color: #fff2c1d1;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-inline: 10px;
   font-family: cursive;
   overflow: hidden;
 }
@@ -693,15 +788,17 @@ button img {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  background-image: url(templates/template6.png); background-position: center; background-repeat: no-repeat; background-size: cover;
 }
 .template6 .profile {
   display: flex;
   align-items: center;
-  padding: 5px 10px;
+  margin: 0px auto; 
+  width: 85%;
 }
 .template6 .textContent {
-  width: 370px;
-  height: 390px;
+  width: 100%;
+  height: 100%;
   position: absolute;
   top: 0px;
   left: 0px;
@@ -710,39 +807,38 @@ button img {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-inline: 10px;
   font-family: cursive;
   overflow: hidden;
 }
 
 .template7 {
-  background-color: #000000;
   font-family: 'Arial', sans-serif;
   text-align: left;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  background-image: url(templates/template7.png); background-position: center; background-repeat: no-repeat; background-size: cover;
 }
 .template7 .profile {
   display: flex;
   align-items: center;
-  padding: 5px 10px;
+  margin: 0px auto; 
+  width: 85%;
 }
 .template7 .textContent {
-  width: 370px;
-  height: 390px;
+  width: 100%;
+  height: 100%;
   position: absolute;
   top: 0px;
   left: 0px;
   border-radius: 0px;
-  background-image: linear-gradient(black, transparent,transparent, transparent, black);
-  text-shadow: 1px 1px 0 #fff, -1px -1px 0 #fff;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  padding-inline: 10px;
-  font-family: cursive;
+  justify-content: flex-start;
+  font-family: sans-serif;
   overflow: hidden;
+  text-transform: uppercase;
+  margin-top: 10px;
 }
 
 .template8 {
@@ -753,26 +849,24 @@ button img {
   flex-direction: column;
   justify-content: center;
   color: #292929;
+  background-image: url(templates/template8.png); background-position: center; background-repeat: no-repeat; background-size: cover;
 }
 .template8 .profile {
   display: flex;
   align-items: center;
-  padding: 5px 10px;
-  position: absolute;
-  bottom: 0;
+  margin: 0px auto; 
+  width: 85%;
 }
 .template8 .textContent {
-  width: 370px;
-  height: 390px;
+  width: 100%;
+  height: 100%;
   position: absolute;
   top: 0px;
   left: 0px;
   border-radius: 0px;
-  background-image: radial-gradient(#0e7fe3, #ffffff);;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-inline: 10px;
   font-family: cursive;
   overflow: hidden;
 }
@@ -784,6 +878,7 @@ button img {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  background-image: url(templates/template9.png); background-position: center; background-repeat: no-repeat; background-size: cover;
 }
 .template9 .profile {
   display: flex;
@@ -795,10 +890,10 @@ button img {
 }
 .template9 .textContent {
   border-radius: 20px;
-  padding: 25px;
+  padding: 15px 6px;
   max-height: 345px;
   text-shadow: 0px 0px 1px #fff;
-  overflow: hidden;
+  position: relative;
 }
 .template9 #quoteText, .template9 span {
   font-size: large;
@@ -809,7 +904,7 @@ button img {
   font-size: 90px;
   font-family: Georgia, 'Times New Roman', Times, serif;
   position: absolute;
-  top: 15%;
+  top: -25%;
   left: 15%;
 }
 .template9 span:after {
@@ -817,8 +912,8 @@ button img {
   font-size: 6vh;
   font-family: Georgia, 'Times New Roman', Times, serif;
   position: absolute;
-  top: 10%;
-  left: 10%;
+  top: 8%;
+  left: 15%;
 }
 
 .template9 #profileImage, .template9 #imageUpload, .template9 .designation {
@@ -832,78 +927,81 @@ button img {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  background-image: url(templates/template10.png); background-position: center; background-repeat: no-repeat; background-size: cover;
 }
 .template10 .profile {
   display: flex;
   align-items: center;
-  padding: 5px 10px;
+  margin: 0px auto; 
+  width: 85%;
 }
 .template10 .textContent {
-  width: 370px;
-  height: 390px;
+  width: 100%;
+  height: 100%;
   position: absolute;
   top: 0px;
   left: 0px;
   border-radius: 0px;
-  background-color: #0606069e;
+  background-color: #060606b3;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-inline: 10px;
   font-family: cursive;
   overflow: hidden;
   color: #fff;
+  padding-top: 5px;
 }
 
 .template11 {
-  background-color: #000000;
   font-family: 'Arial', sans-serif;
   text-align: left;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-end;
   color: #020202;
+  background-image: url(templates/template11.png); background-position: center; background-repeat: no-repeat; background-size: cover;
 }
 .template11 .profile {
   display: flex;
   align-items: center;
-  padding: 5px 10px;
+  margin: 0px auto; 
+  width: 85%;
 }
 .template11 .textContent {
-  width: 370px;
-  height: 390px;
+  width: 100%;
+  height: 100%;
   position: absolute;
   top: 0px;
   left: 0px;
   border-radius: 0px;
-  background-image: conic-gradient(#ffffff, #0e7fe3,#953dfa,#16faee, #ffffff);;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-inline: 10px;
   font-family: cursive;
   overflow: hidden;
 }
 
 .template12 {
   background-color: #ffc7ee;
-  font-family: monospace;
   text-align: left;
   display: flex;
   flex-direction: column;
   justify-content: center;
   overflow: hidden;
+  background-image: url(templates/template12.png); background-position: center; background-repeat: no-repeat; background-size: cover;
 }
 .template12 .profile {
   display: flex;
   align-items: center;
-  padding: 5px 10px;
+  margin: 0px auto; 
+  width: 85%;
 }
 .template12 .textContent {
-  border-radius: 15px;
+  border-radius: 6px;
   background: #ffffffd6;
   max-height: 345px;
   overflow: hidden;
+  position: relative;
 }
 .template12 .profile::before {
   content: "";
@@ -934,8 +1032,6 @@ button img {
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
   width: 100%;
-  margin-top: 10px;
-  border-top: 0.5px solid #ddd;
 }
 
 .dropdown {
@@ -955,7 +1051,7 @@ button img {
   cursor: pointer;
   transition: background-color 0.3s;
   position: relative;
-  width: 100%;
+  height: 30px;
   margin: 0px;
   text-shadow: none;
   width: 130px;
@@ -975,6 +1071,7 @@ button img {
   width: 100%;
   opacity: 0.6;
   color: #113b71;
+  padding-top: 0px;
 }
 
 .dropdown-toggle:after {
@@ -996,9 +1093,10 @@ button img {
   background-color: white;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
-  overflow: hidden;
+  overflow: auto;
   z-index: 1;
   width: 100%;
+  max-height: 300px;
 }
 
 .dropdown-item {
@@ -1013,14 +1111,4 @@ button img {
   color: #267ff3!important;
   background-color: #277ff324!important;
   text-shadow: none;
-}
-
-#randomQuoteBtn {
-  padding: 2px;
-  display: inline-block;
-  position: relative;
-  right: -160px;
-  color: #267ff3;
-  cursor: pointer;
-  font-size: 15px;
 }

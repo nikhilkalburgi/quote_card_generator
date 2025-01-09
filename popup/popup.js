@@ -26,6 +26,45 @@ function wrapText(context, text, maxWidth) {
   return lines;
 }
 
+function resizeImageToSquare(imageSrc, callback) {
+  const targetSize = 320;
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.src = imageSrc;
+  img.onload = function() {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = targetSize;
+      canvas.height = targetSize;
+
+      const aspectRatio = img.width / img.height;
+      let drawWidth, drawHeight, offsetX, offsetY;
+
+      if (aspectRatio > 1) {
+          // Image is wider than it is tall
+          drawWidth = targetSize * aspectRatio;
+          drawHeight = targetSize;
+          offsetX = (drawWidth - targetSize) / 2;
+          offsetY = 0;
+      } else {
+          // Image is taller than it is wide or square
+          drawWidth = targetSize;
+          drawHeight = targetSize / aspectRatio;
+          offsetX = 0;
+          offsetY = (drawHeight - targetSize) / 2;
+      }
+
+      ctx.drawImage(img, -offsetX, -offsetY, drawWidth, drawHeight);
+
+      // Convert the canvas to a data URL and pass it to the callback
+      const resizedImageDataUrl = canvas.toDataURL('image/png');
+      callback(resizedImageDataUrl);
+  };
+  img.onerror = function() {
+      console.error('Failed to load image.');
+  };
+}
+
 function validateInputs() {
   // Get the input elements
   const fullName = document.getElementById('fullName').value.trim();
@@ -179,7 +218,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const loader = document.getElementById('loading');
   const cardContent = document.getElementById('cardContent');
   const downloadCard = document.getElementById('downloadCard');
-  const cardOptions = document.getElementById('cardOptions'); 
   const upgradeComponent = document.getElementById('upgradeComponent');
   const userInput = document.getElementById('userInput');
   const profileImage = document.getElementById('profileImage');
@@ -194,10 +232,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   const homeButton = document.getElementById("home-btn");
   const colorPicker = document.getElementById("colorPicker");
   const randomQuoteBtn = document.getElementById('randomQuoteBtn');
+  const bgChangeBtn = document.getElementById('bg-change-btn');
+  const bgUpload = document.getElementById('bgUpload');
     
   const textAlignOptions = ['left', 'right', 'center'];
   const fontSizeOptions = ['small', 'medium', 'large', 'x-large', 'xx-large', 'x-small', 'xx-small'];
-  const fontFamilyOptions = ['arial', 'times', 'courier','georgia', 'verdana', 'tahoma','trebuchet', 'impact', 'comic', 'helvetica', 'sans-serif', 'cursive', 'monospace'];
+  const fontFamilyOptions = ['Atma', 'UbuntuMono', 'Barel','Delius', 'Inter', 'Kanit', 'Karla','PlaywriteAUSA','Rasa', 'Roboto','RubikVinyl', 'SchoolBell', 'DynaPuff', 'arial', 'times', 'courier','georgia', 'verdana', 'tahoma','trebuchet', 'impact', 'comic', 'helvetica', 'sans-serif', 'cursive', 'monospace', 'Iceberg', 'Tomorrow', 'Tenali', 'Wallpoet', 'IndieFlower'];
   const FontTypeOptions = ['capitalize', 'uppercase', 'lowercase', 'none'];
 
   let dropdownValue = 'nature';
@@ -224,15 +264,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     userInput.classList.add('hidden');
     randomQuoteBtn.classList.add('hidden');
     titleElement.innerText = state.title;
-    name.innerText = state.name || 'Your name';
-    designation.innerText = state.designation || 'Your designation';
+    name.innerText = state.name || 'Akhilesh';
+    designation.innerText = state.designation || 'Founder at QuoteMaker';
     titleElement.style.color = state.color? state.color : '#000000';
     name.style.color = state.color? state.color : '#000000';
     designation.style.color = state.color? state.color : '#000000';
     colorPicker.value = state.color? state.color : '#000000';
-    cardContent.style.backgroundImage = `url(${state.backgroundImage || 'default.webp'})`;
+    cardContent.querySelector('img'). src = state.backgroundImage || 'default.png';
     cardContent.className = state.template ? state.template : cardContent.className;
-    profileImage.src = state.src || 'upload.jpg';
+    profileImage.src = state.src || 'images/profile.png';
     titleElement.style.fontSize = state.fontSize? state.fontSize : titleElement.style.fontSize;
     titleElement.style.textAlign = state.textAlign? state.textAlign : titleElement.style.textAlign;
     titleElement.style.fontFamily = state.fontFamily? state.fontFamily : titleElement.style.fontFamily;
@@ -240,13 +280,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     card.classList.remove('hidden');
     editContainer.classList.remove('hidden');
     editButton.disabled = false;
-    editButton.querySelector('img').src = 'edit.png';
+    editButton.querySelector('img').src = 'images/edit.png';
     loader.classList.add('hidden');
     cardContent.classList.remove('hidden');
     btnGroup.classList.remove('hidden');
     editContainer.classList.remove('hidden');
     downloadCard.classList.remove('hidden');
-    cardOptions.classList.remove('hidden');
   }
 
   generateCardBtn.addEventListener("click", async () => {
@@ -264,7 +303,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     card.classList.remove('hidden');
     editContainer.classList.remove('hidden');
     editButton.disabled = false;
-    editButton.querySelector('img').src = 'edit.png';
+    editButton.querySelector('img').src = 'images/edit.png';
     generateCardBtn.classList.add('hidden');
     userInput.classList.add('hidden');
     randomQuoteBtn.classList.add('hidden');
@@ -274,7 +313,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       btnGroup.classList.add('hidden');
       editContainer.classList.add('hidden');
       downloadCard.classList.add('hidden');
-      cardOptions.classList.add('hidden');
     }
     
     const options = { hour: 'numeric', minute: '2-digit', hour12: true, day: 'numeric', month: 'short', year: 'numeric' };
@@ -296,7 +334,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       quota.classList.remove('hidden');
       editContainer.classList.remove('hidden');
       editButton.disabled = true;
-      editButton.querySelector('img').src = 'edit_disabled.png';
+      editButton.querySelector('img').src = 'images/edit_disabled.png';
       editButton.style.background = '#f3f3f3';
       upgradeComponent.classList.add('hidden');
       return;
@@ -310,38 +348,38 @@ document.addEventListener("DOMContentLoaded", async () => {
     .then(response => response.json())
     .then(data => {
         // Use the image URL from the response
-        const imageUrl = data.urls.regular;
-        cardContent.style.backgroundImage = `url(${imageUrl})`;
-        titleElement.innerText = userInput.value;
-        name.innerText = "Your name";
-        designation.innerText = "Your designation";
-        loader.classList.add('hidden');
-        cardContent.classList.remove('hidden');
-        btnGroup.classList.remove('hidden');
-        editContainer.classList.remove('hidden');
-        downloadCard.classList.remove('hidden');
-        cardOptions.classList.remove('hidden');
-        // Update usage data
-        if (new Date(usageData.date).toDateString() !== new Date(today).toDateString() ) {
-          // Reset usage for a new day
-          usageData.date = today;
-          usageData.clicks = 0;
-          usageData.unlimited = false;
-        }
-        usageData.clicks += 1;
-        localStorage.setItem('usage', JSON.stringify(usageData));
-        localStorage.setItem('state', JSON.stringify({title: titleElement.innerText, name: name.innerText, designation: designation.innerText, backgroundImage: imageUrl, image: profileImage.src, template: cardContent.className, color: colorPicker.value}));
+        const imageUrl = data?.urls?.regular || 'templates/template1.png';
+        resizeImageToSquare(imageUrl, function(resizedImageDataUrl) {
+          cardContent.querySelector('img'). src = resizedImageDataUrl;
+          titleElement.innerText = userInput.value;
+          name.innerText = "Akhilesh";
+          designation.innerText = "Founder at QuoteMaker";
+          loader.classList.add('hidden');
+          cardContent.classList.remove('hidden');
+          btnGroup.classList.remove('hidden');
+          editContainer.classList.remove('hidden');
+          downloadCard.classList.remove('hidden');
+          // Update usage data
+          if (new Date(usageData.date).toDateString() !== new Date(today).toDateString() ) {
+            // Reset usage for a new day
+            usageData.date = today;
+            usageData.clicks = 0;
+            usageData.unlimited = false;
+          }
+          usageData.clicks += 1;
+          localStorage.setItem('usage', JSON.stringify(usageData));
+          localStorage.setItem('state', JSON.stringify({title: titleElement.innerText, name: name.innerText, designation: designation.innerText, backgroundImage: resizedImageDataUrl, image: profileImage.src, template: cardContent.className, color: colorPicker.value}));
+      });
     })
     .catch(error => {
       titleElement.innerText = userInput.value;
-      name.innerText = "Your name";
-      designation.innerText = "Your designation";
+      name.innerText = "Akhilesh";
+      designation.innerText = "Founder at QuoteMaker";
       loader.classList.add('hidden');
       cardContent.classList.remove('hidden');
       btnGroup.classList.remove('hidden');
       editContainer.classList.remove('hidden');
       downloadCard.classList.remove('hidden');
-      cardOptions.classList.remove('hidden');
       // Update usage data
       if (new Date(usageData.date).toDateString() !== new Date(today).toDateString() ) {
         // Reset usage for a new day
@@ -363,13 +401,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     html2canvas(cardContent, {
         width: cardContent.offsetWidth,
         height: cardContent.offsetHeight,
-        scale: 5, // Increase scale for better quality
+        scale: 5,
         useCORS: true,
     }).then(canvas => {
        // Resize the canvas to 1080x1080 or 1080x1350
         const resizedCanvas = document.createElement('canvas');
         const targetWidth = 1080;
-        const targetHeight = document.getElementById('format1').checked ? 1080 : 1350;
+        const targetHeight = 1080;
         resizedCanvas.width = targetWidth;
         resizedCanvas.height = targetHeight;
         const ctx = resizedCanvas.getContext('2d');
@@ -380,7 +418,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const x = (targetWidth - width) / 2;
         const y = (targetHeight - height) / 2;
 
-        ctx.drawImage(canvas, x, y, width, height);
+        ctx.drawImage(canvas, x - 2, y, width, height);
 
         // Convert the resized canvas to a data URL and download it
         const dataURL = resizedCanvas.toDataURL('image/png');
@@ -392,13 +430,30 @@ document.addEventListener("DOMContentLoaded", async () => {
         card.classList.add('hidden');
         cardContent.classList.add('hidden');
         btnGroup.classList.add('hidden');
+        if(editButton.textContent === "✔") {
+          const editableElements = cardContent.querySelectorAll("h1, p");
+          resetButton.classList.add('hidden');
+          bgChangeBtn.classList.add('hidden');
+          editableElements.forEach((element) => {
+            element.setAttribute("contenteditable", "false");
+            element.style.overflow = "hidden";
+            if(element.innerHTML === '<br>') element.innerHTML = '';
+          });
+      
+          editButton.innerHTML = "<img src='images/edit.png' width='100%' height='100%'/>";
+          resetButton.style.opacity = 0;
+          bgChangeBtn.style.opacity = 0;
+        }
         editContainer.classList.add('hidden');
         downloadCard.classList.add('hidden');
-        cardOptions.classList.add('hidden');
         loader.classList.remove('hidden');
         generateCardBtn.classList.remove('hidden');
         userInput.classList.remove('hidden');
         randomQuoteBtn.classList.remove('hidden');
+        name.style.removeProperty('color');
+        designation.style.removeProperty('color');
+        titleElement.style.removeProperty('color');
+        colorPicker.value = '#000000'
         localStorage.removeItem('state');
 
     }).catch(error => {
@@ -433,7 +488,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         quota.classList.add('hidden');
         editContainer.classList.add('hidden');
         editButton.disabled = false;
-        editButton.querySelector('img').src = 'edit.png'
+        editButton.querySelector('img').src = 'images/edit.png'
         editButton.style.background = '#eaf3fe';
         generateCardBtn.classList.remove('hidden');
         userInput.classList.remove('hidden');
@@ -478,8 +533,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       titleElement.innerText = state.title;
       name.innerText = state.name;
       designation.innerText = state.designation;
-      cardContent.style.backgroundImage = `url(${state.backgroundImage || 'default.webp'})`;
-      profileImage.src = state.image || 'upload.jpg';
+      cardContent.querySelector('img'). src = state.backgroundImage || 'images/default.png';
+      profileImage.src = state.image || 'images/profile.png';
     }
   });
 
@@ -493,23 +548,28 @@ document.addEventListener("DOMContentLoaded", async () => {
       // Switch to edit mode
       editableElements.forEach((element) => {
         element.setAttribute("contenteditable", "true");
-        element.style.border = "1px dashed gray"; // Highlight editable elements
       });
   
       editBtn.innerHTML = "✔"; // Change button to confirm mode
-      document.getElementById("reset-btn").classList.remove('hidden');
+      resetButton.classList.remove('hidden');
+      bgChangeBtn.classList.remove('hidden');
+      resetButton.style.opacity = 1;
+      bgChangeBtn.style.opacity = 1;
+      titleElement.focus();
     } else {
       // Switch to confirm mode
-      document.getElementById("reset-btn").classList.add('hidden');
+      resetButton.classList.add('hidden');
+      bgChangeBtn.classList.add('hidden');
       editableElements.forEach((element) => {
         element.setAttribute("contenteditable", "false");
         element.style.overflow = "hidden";
-        element.style.border = "none"; // Remove border
         if(element.innerHTML === '<br>') element.innerHTML = '';
       });
   
-      editBtn.innerHTML = "<img src='edit.png' width='100%' height='100%'/>"; // Change button back to edit mode
-      localStorage.setItem('state', JSON.stringify({title: titleElement.innerText, name: name.innerText, designation: designation.innerText, backgroundImage: cardContent.style.backgroundImage.replace(/^url$$["']?/, '').replace(/["']?$$$/, ''), image: profileImage.src, template: cardContent.className, color: colorPicker.value}))
+      editBtn.innerHTML = "<img src='images/edit.png' width='100%' height='100%'/>";
+      resetButton.style.opacity = 0;
+      bgChangeBtn.style.opacity = 0;
+      localStorage.setItem('state', JSON.stringify({title: titleElement.innerText, name: name.innerText, designation: designation.innerText, backgroundImage: cardContent.querySelector('img'). src.replace(/^url$$["']?/, '').replace(/["']?$$$/, ''), image: profileImage.src, template: cardContent.className, color: colorPicker.value}))
     }
   });
 
@@ -517,7 +577,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     e.preventDefault();
     card.classList.add('hidden');
     downloadCard.classList.add('hidden');
-    cardOptions.classList.add('hidden');
     document.getElementById('lr-title').classList.add('hidden');
     document.getElementById('lr-description').classList.add('hidden');
     upgradeComponent.classList.add('hidden');
@@ -526,8 +585,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     randomQuoteBtn.classList.add('hidden');
     quota.classList.remove('hidden');
     editContainer.classList.remove('hidden');
+    btnGroup.classList.add('hidden');
+    resetButton.classList.add('hidden');
+    bgUpload.classList.add('hidden');
     editButton.disabled = true;
-    editButton.querySelector('img').src = 'edit_disabled.png';
+    editButton.querySelector('img').src = 'images/edit_disabled.png';
     editButton.style.background = '#f3f3f3';
   })
 
@@ -542,22 +604,40 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.querySelectorAll('.template-option').forEach(option => {
       option.addEventListener('click', function() {
         const selectedTemplate = this.getAttribute('data-template');
-        applyTemplate(selectedTemplate);
-        document.getElementById('modal').style.display = 'none';
+        applyTemplate(selectedTemplate, `templates/${selectedTemplate}.png`);
       });
   });
 
-  function applyTemplate(template) {
-    titleElement.style.removeProperty('fontFamily');
-    titleElement.style.removeProperty('fontSize');
-    titleElement.style.removeProperty('textTransform');
-    titleElement.style.removeProperty('textAlign');
-    cardContent.className = 'quote-card ' + template; // Apply the selected template class
-    localStorage.setItem('state', JSON.stringify({title: titleElement.innerText, name: name.innerText, designation: designation.innerText, backgroundImage: cardContent.style.backgroundImage.replace(/^url$$["']?/, '').replace(/["']?$$$/, ''), image: profileImage.src, template: cardContent.className, color: colorPicker.value}))
+  function applyTemplate(template, background) {
+    titleElement.style.removeProperty('font-family');
+    titleElement.style.removeProperty('font-size');
+    titleElement.style.removeProperty('text-transform');
+    titleElement.style.removeProperty('text-align');
+    titleElement.style.removeProperty('color');
+    name.style.removeProperty('color');
+    designation.style.removeProperty('color');
+    cardContent.style.removeProperty('background-image');
+    resizeImageToSquare(background, function(resizedImageDataUrl) {
+      cardContent.querySelector('img').src = resizedImageDataUrl;
+      document.querySelectorAll('.dropdown-toggle').forEach(button => {button.innerText = ''});
+      colorPicker.value = '#000000';
+      cardContent.className = 'quote-card ' + template;
+      document.getElementById('modal').style.display = 'none';
+      localStorage.setItem('state', JSON.stringify({title: titleElement.innerText, name: name.innerText, designation: designation.innerText, backgroundImage: resizedImageDataUrl, image: profileImage.src, template: cardContent.className, color: colorPicker.value}))
+  });
   }
 
   profileImage.addEventListener('click', function() {
     uploadImage.click();
+  });
+  let prevImage = 'images/profile.png';
+  profileImage.addEventListener('mouseenter', function() {
+    prevImage = profileImage.src;
+    profileImage.src = 'images/upload.webp';
+
+  });
+  profileImage.addEventListener('mouseleave', function() {
+    profileImage.src = prevImage;
   });
 
   uploadImage.addEventListener('change', function(event) {
@@ -565,17 +645,34 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (file) {
         const reader = new FileReader();
         reader.onload = function(e) {
-            profileImage.src = e.target.result;
+          resizeImageToSquare(e.target.result, (resizedImageDataUrl) => {
+            profileImage.src = resizedImageDataUrl;
+            prevImage = resizedImageDataUrl;
+            localStorage.setItem('state', JSON.stringify({title: titleElement.innerText, name: name.innerText, designation: designation.innerText, backgroundImage: resizedImageDataUrl, image: profileImage.src, template: cardContent.className, color: colorPicker.value}))
+          })
+        };
+        reader.readAsDataURL(file);
+    }
+  });
+
+  bgChangeBtn.addEventListener('click', () => {
+    bgUpload.click();
+  })
+
+  bgUpload.addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          resizeImageToSquare(e.target.result, function(resizedImageDataUrl) {
+            cardContent.querySelector('img'). src = resizedImageDataUrl;
+        });
         };
         reader.readAsDataURL(file);
     }
   });
 
   randomize.addEventListener('click', function() {
-    if(randomize.innerHTML === 'Randomizing...') return;
-
-
-    randomize.innerHTML= 'Randomizing... <img src="randomize.png"/>';
     
     fetch(`https://api.unsplash.com/photos/random?orientation=portrait&query=${dropdownValue}`, {
       headers: {
@@ -585,13 +682,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     .then(response => response.json())
     .then(data => {
         // Use the image URL from the response
-        randomize.innerHTML= 'Randomize <img src="randomize.png"/>';
-        const imageUrl = data.urls.regular;
-        cardContent.style.backgroundImage = `url(${imageUrl})`;
-        localStorage.setItem('state', JSON.stringify({title: titleElement.innerText, name: name.innerText, designation: designation.innerText, backgroundImage: imageUrl, image: profileImage.src, template: cardContent.className, color: colorPicker.value}));
+        resizeImageToSquare(data?.urls?.regular || 'templates/template1.png', function(resizedImageDataUrl) {
+          const imageUrl = resizedImageDataUrl;
+          cardContent.querySelector('img').src = imageUrl;
+          localStorage.setItem('state', JSON.stringify({title: titleElement.innerText, name: name.innerText, designation: designation.innerText, backgroundImage: imageUrl, image: profileImage.src, template: cardContent.className, color: colorPicker.value}));
+      });
     })
     .catch(error => {
-      randomize.innerHTML= 'Randomize <img src="randomize.png"/>';
       console.log('Error fetching image:', error)});
   });
 
@@ -611,16 +708,16 @@ document.addEventListener("DOMContentLoaded", async () => {
       
       if(fontSizeOptions.indexOf(value) > -1) {
         titleElement.style.fontSize = value;
-        localStorage.setItem('state', JSON.stringify({title: titleElement.innerText, name: name.innerText, designation: designation.innerText, backgroundImage: cardContent.style.backgroundImage.replace(/^url$$["']?/, '').replace(/["']?$$$/, ''), image: profileImage.src, template: cardContent.className, color: colorPicker.value, fontSize: value, fontFamily: titleElement.style.fontFamily, textAlign: titleElement.style.textAlign, fontType: titleElement.style.textTransform}))
+        localStorage.setItem('state', JSON.stringify({title: titleElement.innerText, name: name.innerText, designation: designation.innerText, backgroundImage: cardContent.querySelector('img'). src.replace(/^url$$["']?/, '').replace(/["']?$$$/, ''), image: profileImage.src, template: cardContent.className, color: colorPicker.value, fontSize: value, fontFamily: titleElement.style.fontFamily, textAlign: titleElement.style.textAlign, fontType: titleElement.style.textTransform}))
       } else if(textAlignOptions.indexOf(value) > -1) {
         titleElement.style.textAlign = value;
-        localStorage.setItem('state', JSON.stringify({title: titleElement.innerText, name: name.innerText, designation: designation.innerText, backgroundImage: cardContent.style.backgroundImage.replace(/^url$$["']?/, '').replace(/["']?$$$/, ''), image: profileImage.src, template: cardContent.className, color: colorPicker.value, fontSize: titleElement.style.fontSize, fontFamily: titleElement.style.fontFamily, textAlign: value, fontType: titleElement.style.textTransform}))
+        localStorage.setItem('state', JSON.stringify({title: titleElement.innerText, name: name.innerText, designation: designation.innerText, backgroundImage: cardContent.querySelector('img'). src.replace(/^url$$["']?/, '').replace(/["']?$$$/, ''), image: profileImage.src, template: cardContent.className, color: colorPicker.value, fontSize: titleElement.style.fontSize, fontFamily: titleElement.style.fontFamily, textAlign: value, fontType: titleElement.style.textTransform}))
       } else if(fontFamilyOptions.indexOf(value) > -1) {
         titleElement.style.fontFamily = value;
-        localStorage.setItem('state', JSON.stringify({title: titleElement.innerText, name: name.innerText, designation: designation.innerText, backgroundImage: cardContent.style.backgroundImage.replace(/^url$$["']?/, '').replace(/["']?$$$/, ''), image: profileImage.src, template: cardContent.className, color: colorPicker.value, fontSize: titleElement.style.fontSize, fontFamily: value, textAlign: titleElement.style.textAlign, fontType: titleElement.style.textTransform}))
+        localStorage.setItem('state', JSON.stringify({title: titleElement.innerText, name: name.innerText, designation: designation.innerText, backgroundImage: cardContent.querySelector('img'). src.replace(/^url$$["']?/, '').replace(/["']?$$$/, ''), image: profileImage.src, template: cardContent.className, color: colorPicker.value, fontSize: titleElement.style.fontSize, fontFamily: value, textAlign: titleElement.style.textAlign, fontType: titleElement.style.textTransform}))
       } else if(FontTypeOptions.indexOf(value) > -1) {
         titleElement.style.textTransform = value;
-        localStorage.setItem('state', JSON.stringify({title: titleElement.innerText, name: name.innerText, designation: designation.innerText, backgroundImage: cardContent.style.backgroundImage.replace(/^url$$["']?/, '').replace(/["']?$$$/, ''), image: profileImage.src, template: cardContent.className, color: colorPicker.value, fontSize: titleElement.style.fontSize, fontFamily: titleElement.style.fontFamily, textAlign: titleElement.style.textAlign, fontType: value}))
+        localStorage.setItem('state', JSON.stringify({title: titleElement.innerText, name: name.innerText, designation: designation.innerText, backgroundImage: cardContent.querySelector('img'). src.replace(/^url$$["']?/, '').replace(/["']?$$$/, ''), image: profileImage.src, template: cardContent.className, color: colorPicker.value, fontSize: titleElement.style.fontSize, fontFamily: titleElement.style.fontFamily, textAlign: titleElement.style.textAlign, fontType: value}))
       } else {
         dropdownValue = value
       }
@@ -631,7 +728,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     titleElement.style.color = colorPicker.value || '#000000';
     name.style.color = colorPicker.value || '#000000';
     designation.style.color = colorPicker.value || '#000000';
-    localStorage.setItem('state', JSON.stringify({title: titleElement.innerText, name: name.innerText, designation: designation.innerText, backgroundImage: cardContent.style.backgroundImage.replace(/^url$$["']?/, '').replace(/["']?$$$/, ''), image: profileImage.src, template: cardContent.className, color: colorPicker.value}))
+    localStorage.setItem('state', JSON.stringify({title: titleElement.innerText, name: name.innerText, designation: designation.innerText, backgroundImage: cardContent.querySelector('img'). src.replace(/^url$$["']?/, '').replace(/["']?$$$/, ''), image: profileImage.src, template: cardContent.className, color: colorPicker.value}))
   })
 
   randomQuoteBtn.addEventListener('click', () => {
@@ -653,7 +750,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   })
 });
 
-// // Disable right-click
+// Disable right-click
 document.addEventListener("contextmenu", (event) => event.preventDefault());
 
 // Disable specific keyboard shortcuts
