@@ -1,4 +1,4 @@
-const accessKey = '<UNSPLASH_ACCESS_KEY>';
+const accessKey = 'UNSPLASH_ACCESS_KEY';
 
 // Function to wrap text based on the maximum width
 function wrapText(context, text, maxWidth) {
@@ -145,8 +145,8 @@ async function verifyPayment(orderId, razorpayPaymentId, razorpaySignature, secr
 async function razorpayPaymentGateway(fullName, email, contact, amout) {
   return new Promise(async (resolve, reject) => {
     try {
-      const keyId = "KEY_ID"; // Replace with your Razorpay key_id
-      const keySecret = "KEY_SECRET"; // Replace with your Razorpay key_secret
+      const keyId = ""; // Replace with your Razorpay key_id
+      const keySecret = ""; // Replace with your Razorpay key_secret
       const auth = btoa(`${keyId}:${keySecret}`); // Encode credentials for Basic Auth
     
       // Step 1: Create an order
@@ -174,8 +174,8 @@ async function razorpayPaymentGateway(fullName, email, contact, amout) {
         key: keyId,
         amount: order.amount,
         currency: order.currency,
-        name: "Kreative Bytes",
-        description: "Transaction to Kreative Bytes",
+        name: "KreativeByte",
+        description: "Transaction to KreativeByte",
         order_id: order.id, // Pass the order_id from the response
         handler: async function (response) {
           const result = await verifyPayment(order.id, response.razorpay_payment_id, response.razorpay_signature, keySecret)
@@ -191,7 +191,7 @@ async function razorpayPaymentGateway(fullName, email, contact, amout) {
           contact: contact,
         },
         theme: {
-          color: "#4CAF50",
+          color: "#267ff3",
         },
       };
     
@@ -751,17 +751,17 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 // Disable right-click
-document.addEventListener("contextmenu", (event) => event.preventDefault());
+// document.addEventListener("contextmenu", (event) => event.preventDefault());
 
-// Disable specific keyboard shortcuts
-document.addEventListener("keydown", (event) => {
-  if (
-    event.key === "F12" || // F12
-    (event.ctrlKey && event.shiftKey && event.key === "I") || // Ctrl+Shift+I
-    (event.ctrlKey && event.shiftKey && event.key === "J") || // Ctrl+Shift+J
-    (event.ctrlKey && event.key === "U") // Ctrl+U (View Source)
-  ) {
-    event.preventDefault();
-  }
-});
+// // Disable specific keyboard shortcuts
+// document.addEventListener("keydown", (event) => {
+//   if (
+//     event.key === "F12" || // F12
+//     (event.ctrlKey && event.shiftKey && event.key === "I") || // Ctrl+Shift+I
+//     (event.ctrlKey && event.shiftKey && event.key === "J") || // Ctrl+Shift+J
+//     (event.ctrlKey && event.key === "U") // Ctrl+U (View Source)
+//   ) {
+//     event.preventDefault();
+//   }
+// });
 

@@ -528,6 +528,7 @@ button#payButton {
   object-fit: cover;
   object-position: center;
   background-color: #fff;
+  border: 0.5px solid #8d8d8d;
 }
 
 .profile-info {
@@ -671,7 +672,7 @@ button img {
 }
 .template1 .textContent {
   border-radius: 6px;
-  background: #fff;
+  background: #ffffffc9;
   max-height: 345px;
   overflow: hidden;
   box-shadow: 2px 2px 5px #737373;
@@ -695,7 +696,7 @@ button img {
 }
 .template2 .textContent {
   border-radius: 6px;
-  background: #fff;
+  background: #ffffffc9;
   max-height: 345px;
   overflow: hidden;
   box-shadow: 2px 2px 5px #737373;
@@ -719,7 +720,7 @@ button img {
 }
 .template3 .textContent {
   border-radius: 6px;
-  background: #fff;
+  background: #ffffffc9;
   max-height: 345px;
   overflow: hidden;
   box-shadow: 2px 2px 5px #737373;
