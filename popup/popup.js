@@ -26,6 +26,14 @@ function wrapText(context, text, maxWidth) {
   return lines;
 }
 
+ // Function to convert HEX to RGB
+ function hexToRgb(hex) {
+  let r = parseInt(hex.slice(1, 3), 16);
+  let g = parseInt(hex.slice(3, 5), 16);
+  let b = parseInt(hex.slice(5, 7), 16);
+  return { r, g, b };
+}
+
 function resizeImageToSquare(imageSrc, callback) {
   const targetSize = 320;
   const img = new Image();
@@ -142,7 +150,7 @@ async function verifyPayment(orderId, razorpayPaymentId, razorpaySignature, secr
 }
 
 // Payment Gateway API
-async function razorpayPaymentGateway(fullName, email, contact, amout) {
+async function razorpayPaymentGateway(fullName, email, contact, amount, country) {
   return new Promise(async (resolve, reject) => {
     try {
       const keyId = ""; // Replace with your Razorpay key_id
@@ -157,8 +165,8 @@ async function razorpayPaymentGateway(fullName, email, contact, amout) {
           Authorization: `Basic ${auth}`,
         },
         body: JSON.stringify({
-          amount: amout, // Amount in paise (₹20 / ₹100)
-          currency: "INR"
+          amount: (country === 'India')? amount : (amount === 2000)? 100 : 500, // Amount in paise (₹20 / ₹100)
+          currency: (country === 'India')? 'INR':'USD'
         }),
       });
     
@@ -231,8 +239,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   const btnGroup = document.getElementById('btnGroup');
   const homeButton = document.getElementById("home-btn");
   const colorPicker = document.getElementById("colorPicker");
+  const opacitySlider = document.getElementById("colorOpacity");
   const randomQuoteBtn = document.getElementById('randomQuoteBtn');
   const bgChangeBtn = document.getElementById('bg-change-btn');
+  const urlChangeBtn = document.getElementById('url-change-btn');
   const bgUpload = document.getElementById('bgUpload');
     
   const textAlignOptions = ['left', 'right', 'center'];
@@ -248,13 +258,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const timeDifference = (currentTime - lastCheckTime) / (1000 * 60 * 60); // Convert milliseconds to hours
   const options = { hour: 'numeric', minute: '2-digit', hour12: true, day: 'numeric', month: 'short', year: 'numeric' };
 
-  if (timeDifference < (usageData.expiry ?? 4) && usageData.unlimited) {
-    const expiryTime = new Date(new Date(usageData.date).getTime() + (usageData.expiry ?? 4) * 60 * 60 * 1000).toLocaleString('en-US', options);
-    usageData.unlimited = false;
-    upgradeComponent.children[0].innerHTML = '<strong>Thank you for upgrading!</strong>';
-    upgradeComponent.children[1].innerHTML = `Your premium access will expire at <strong>${expiryTime}</strong>. <p style="font-size:14px; margin:0px; padding:0px;">Enjoy unlimited card generation until then!</p>`;
-  }
-  
   const state = JSON.parse(localStorage.getItem('state')) || null;
   if(state) {
     titleElement.classList.remove('hidden');
@@ -270,6 +273,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     name.style.color = state.color? state.color : '#000000';
     designation.style.color = state.color? state.color : '#000000';
     colorPicker.value = state.color? state.color : '#000000';
+    opacitySlider.value = state.opacity? state.opacity : 100;
     cardContent.querySelector('img'). src = state.backgroundImage || 'default.png';
     cardContent.className = state.template ? state.template : cardContent.className;
     profileImage.src = state.src || 'images/profile.png';
@@ -287,6 +291,43 @@ document.addEventListener("DOMContentLoaded", async () => {
     editContainer.classList.remove('hidden');
     downloadCard.classList.remove('hidden');
   }
+  let country = 'USD';
+  // fetch location
+  try {
+    // Fetch geolocation data (using a free API like ipapi)
+    const response = await fetch('https://ipapi.co/json/');
+    const data = await response.json();
+
+    // Extract user's country
+    country = data.country_name || "India";
+
+  } catch (error) {
+    country = "India";
+  }
+
+  upgradeComponent.children[0].innerHTML = 'Generate up to 2 news cards for FREE!';
+  if(country === 'India') {
+    upgradeComponent.children[1].innerHTML = `<a href="#" id="link" class="link">Upgrade</a> for just ₹20/- and enjoy unlimited access for the next 4 hours!`;
+    document.getElementById('currencyUpdate1').innerText = '₹20!';
+    document.getElementById('payButton').innerText = 'Pay ₹20.00';
+    document.getElementById('currencyUpdate3').innerText = '₹20.00';
+    document.getElementById('currencyUpdate4').innerText = '₹100.00';
+  } else {
+    upgradeComponent.children[1].innerHTML = `<a href="#" id="link" class="link">Upgrade</a> for just $1/- and enjoy unlimited access for the next 4 hours!`;
+    document.getElementById('currencyUpdate1').innerText = '$1!';
+    document.getElementById('payButton').innerText = 'Pay $1.00';
+    document.getElementById('currencyUpdate3').innerText = '$1.00';
+    document.getElementById('currencyUpdate4').innerText = '$5.00';
+  }
+
+
+  if (timeDifference < (usageData.expiry ?? 4) && usageData.unlimited) {
+    const expiryTime = new Date(new Date(usageData.date).getTime() + (usageData.expiry ?? 4) * 60 * 60 * 1000).toLocaleString('en-US', options);
+    usageData.unlimited = false;
+    upgradeComponent.children[0].innerHTML = '<strong>Thank you for upgrading!</strong>';
+    upgradeComponent.children[1].innerHTML = `Your premium access will expire at <strong>${expiryTime}</strong>. <p style="font-size:14px; margin:0px; padding:0px;">Enjoy unlimited card generation until then!</p>`;
+  }
+  
 
   generateCardBtn.addEventListener("click", async () => {
 
@@ -324,8 +365,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   
     if (timeDifference >= 8) {
       usageData.unlimited = false;
-      upgradeComponent.children[0].innerHTML = 'Generate up to 2 news cards for FREE!'
-      upgradeComponent.children[1].innerHTML = '<a href="#" class="link">Upgrade</a> for just ₹10/- and enjoy unlimited access for the next 4 hours!'
+      upgradeComponent.children[0].innerHTML = 'Generate up to 2 news cards for FREE!';
+      upgradeComponent.children[1].innerHTML = `<a href="#" id="link" class="link">Upgrade</a> for just ${(country === 'India')? '₹20':'$1'}/- and enjoy unlimited access for the next 4 hours!`;
     }
     
     // Quota exceeded
@@ -434,6 +475,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           const editableElements = cardContent.querySelectorAll("h1, p");
           resetButton.classList.add('hidden');
           bgChangeBtn.classList.add('hidden');
+          urlChangeBtn.classList.add('hidden');
           editableElements.forEach((element) => {
             element.setAttribute("contenteditable", "false");
             element.style.overflow = "hidden";
@@ -443,6 +485,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           editButton.innerHTML = "<img src='images/edit.png' width='100%' height='100%'/>";
           resetButton.style.opacity = 0;
           bgChangeBtn.style.opacity = 0;
+          urlChangeBtn.style.opacity = 0;
         }
         editContainer.classList.add('hidden');
         downloadCard.classList.add('hidden');
@@ -477,7 +520,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const fullName = document.getElementById('fullName').value.trim();
       const email = document.getElementById('email').value.trim();
       const contact = document.getElementById('contact').value.trim();
-      const paymentResponse = await razorpayPaymentGateway(fullName, email, contact, document.getElementById('pay1').checked ? 2000 : 10000);
+      const paymentResponse = await razorpayPaymentGateway(fullName, email, contact, document.getElementById('pay1').checked ? 2000 : 10000, country);
       
       if (paymentResponse.success) {
         const usageData = JSON.parse(localStorage.getItem('usage')) || {};
@@ -552,15 +595,21 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
   
       editBtn.innerHTML = "✔"; // Change button to confirm mode
-      resetButton.classList.remove('hidden');
-      bgChangeBtn.classList.remove('hidden');
       resetButton.style.opacity = 1;
       bgChangeBtn.style.opacity = 1;
+      urlChangeBtn.style.opacity = 1;
+      resetButton.classList.remove('hidden');
+      bgChangeBtn.classList.remove('hidden');
+      urlChangeBtn.classList.remove('hidden');
       titleElement.focus();
     } else {
       // Switch to confirm mode
+      resetButton.style.opacity = 0;
+      bgChangeBtn.style.opacity = 0;
+      urlChangeBtn.style.opacity = 0;
       resetButton.classList.add('hidden');
       bgChangeBtn.classList.add('hidden');
+      urlChangeBtn.classList.add('hidden');
       editableElements.forEach((element) => {
         element.setAttribute("contenteditable", "false");
         element.style.overflow = "hidden";
@@ -568,8 +617,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
   
       editBtn.innerHTML = "<img src='images/edit.png' width='100%' height='100%'/>";
-      resetButton.style.opacity = 0;
-      bgChangeBtn.style.opacity = 0;
       localStorage.setItem('state', JSON.stringify({title: titleElement.innerText, name: name.innerText, designation: designation.innerText, backgroundImage: cardContent.querySelector('img'). src.replace(/^url$$["']?/, '').replace(/["']?$$$/, ''), image: profileImage.src, template: cardContent.className, color: colorPicker.value}))
     }
   });
@@ -587,8 +634,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     quota.classList.remove('hidden');
     editContainer.classList.remove('hidden');
     btnGroup.classList.add('hidden');
-    resetButton.classList.add('hidden');
-    bgUpload.classList.add('hidden');
+    if(!resetButton.classList.contains('hidden')) {
+      editButton.click();
+    }
     editButton.querySelector('img').src = 'images/edit_disabled.png';
     editButton.disabled = true;
     editButton.style.background = '#f3f3f3';
@@ -602,12 +650,31 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById('modal').style.display = 'none';
   });
 
+  document.getElementById('url-change-btn').addEventListener('click', function() {
+    document.getElementById('urlModal').style.display = 'flex';
+  });
+
+  let prevBg = cardContent.querySelector('img').src;
+  document.querySelector('.urlclose').addEventListener('click', function() {
+    document.getElementById('urlModal').style.display = 'none';
+    if(document.getElementById('userUrl').value) {
+      prevBg = cardContent.querySelector('img').src
+      cardContent.querySelector('img'). src = document.getElementById('userUrl').value;
+    } else {
+      cardContent.querySelector('img'). src = prevBg
+    }
+  });
+
   document.querySelectorAll('.template-option').forEach(option => {
       option.addEventListener('click', function() {
         const selectedTemplate = this.getAttribute('data-template');
         applyTemplate(selectedTemplate, `templates/${selectedTemplate}.png`);
       });
   });
+
+  document.getElementById('pasteBtn').addEventListener('click', async()=> {
+    userInput.value = await navigator.clipboard.readText();
+  })
 
   function applyTemplate(template, background) {
     titleElement.style.removeProperty('font-family');
@@ -726,10 +793,24 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   colorPicker.addEventListener('change', () => {
-    titleElement.style.color = colorPicker.value || '#000000';
-    name.style.color = colorPicker.value || '#000000';
-    designation.style.color = colorPicker.value || '#000000';
-    localStorage.setItem('state', JSON.stringify({title: titleElement.innerText, name: name.innerText, designation: designation.innerText, backgroundImage: cardContent.querySelector('img'). src.replace(/^url$$["']?/, '').replace(/["']?$$$/, ''), image: profileImage.src, template: cardContent.className, color: colorPicker.value}))
+    const hex = colorPicker.value;
+    const opacity = opacitySlider.value / 100; // Convert to 0-1 range
+    const { r, g, b } = hexToRgb(hex);
+    const rgbaValue = `rgba(${r}, ${g}, ${b}, ${opacity})`;
+    titleElement.style.color = rgbaValue || '#000000';
+    name.style.color = rgbaValue || '#000000';
+    designation.style.color = rgbaValue || '#000000';
+    localStorage.setItem('state', JSON.stringify({title: titleElement.innerText, name: name.innerText, designation: designation.innerText, backgroundImage: cardContent.querySelector('img'). src.replace(/^url$$["']?/, '').replace(/["']?$$$/, ''), image: profileImage.src, template: cardContent.className, color: rgbaValue, opacity: opacitySlider.value}))
+  })
+  opacitySlider.addEventListener('change', () => {
+    const hex = colorPicker.value;
+    const opacity = opacitySlider.value / 100; // Convert to 0-1 range
+    const { r, g, b } = hexToRgb(hex);
+    const rgbaValue = `rgba(${r}, ${g}, ${b}, ${opacity})`;
+    titleElement.style.color = rgbaValue || '#000000';
+    name.style.color = rgbaValue || '#000000';
+    designation.style.color = rgbaValue || '#000000';
+    localStorage.setItem('state', JSON.stringify({title: titleElement.innerText, name: name.innerText, designation: designation.innerText, backgroundImage: cardContent.querySelector('img'). src.replace(/^url$$["']?/, '').replace(/["']?$$$/, ''), image: profileImage.src, template: cardContent.className, color: rgbaValue, opacity: opacitySlider.value}))
   })
 
   randomQuoteBtn.addEventListener('click', () => {
@@ -744,27 +825,27 @@ document.addEventListener("DOMContentLoaded", async () => {
   })
 
   document.getElementById('pay1').addEventListener('change', (e) => {
-    payButton.innerHTML = 'Pay ₹20.00';
-    document.getElementById('showAmt').innerHTML = 'Unlock unlimited card generation for the next 4 hours by upgrading for just <strong >₹20!</strong>';
+    payButton.innerHTML = `Pay ${(country === 'India')? '₹20.00':'$1.00'}`;
+    document.getElementById('showAmt').innerHTML = `Unlock unlimited card generation for the next 4 hours by upgrading for just <strong >${(country === 'India')? '₹20!':'$1!'}</strong>`;
   })
   document.getElementById('pay2').addEventListener('change', (e) => {
-    payButton.innerHTML = 'Pay ₹100.00';
-    document.getElementById('showAmt').innerHTML = 'Unlock unlimited card generation for the next 24 hours by upgrading for just <strong >₹100!</strong>';
+    payButton.innerHTML = `Pay ${(country === 'India')? '₹100.00':'$5.00'}`;
+    document.getElementById('showAmt').innerHTML = `Unlock unlimited card generation for the next 24 hours by upgrading for just <strong >${(country === 'India')? '₹100!':'$5!'}</strong>`;
   })
 });
 
 // Disable right-click
-document.addEventListener("contextmenu", (event) => event.preventDefault());
+// document.addEventListener("contextmenu", (event) => event.preventDefault());
 
-// Disable specific keyboard shortcuts
-document.addEventListener("keydown", (event) => {
-  if (
-    event.key === "F12" || // F12
-    (event.ctrlKey && event.shiftKey && event.key === "I") || // Ctrl+Shift+I
-    (event.ctrlKey && event.shiftKey && event.key === "J") || // Ctrl+Shift+J
-    (event.ctrlKey && event.key === "U") // Ctrl+U (View Source)
-  ) {
-    event.preventDefault();
-  }
-});
+// // Disable specific keyboard shortcuts
+// document.addEventListener("keydown", (event) => {
+//   if (
+//     event.key === "F12" || // F12
+//     (event.ctrlKey && event.shiftKey && event.key === "I") || // Ctrl+Shift+I
+//     (event.ctrlKey && event.shiftKey && event.key === "J") || // Ctrl+Shift+J
+//     (event.ctrlKey && event.key === "U") // Ctrl+U (View Source)
+//   ) {
+//     event.preventDefault();
+//   }
+// });
 

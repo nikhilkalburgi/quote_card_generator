@@ -13,6 +13,9 @@
     <h1 style="background-image: url(images/header.png); background-repeat: no-repeat; background-size: contain; width: 30%; height: 40px; margin-inline: auto;"></h1>
     <p class="tagline">Create and share quote cards instantly.</p>
     <textarea id="userInput" class="userInput" placeholder="Put your text here!"></textarea>
+    <button id="pasteBtn" class="btn edit-btn" title="Paste copied text" style="position: absolute; right: 50px; bottom: 291px; background: none;">
+      <img width="100%" src="images/paste.png">
+    </button>
     <button id="randomQuoteBtn" class="light-background">Random Quote</button>
 
     <div id="editContainer" class="button-container hidden">
@@ -21,6 +24,9 @@
       <button id="bg-change-btn" class="btn edit-btn hidden" title="Change Background" style="opacity: 0;">
         <img width="100%" src="images/upload.webp">
         <input type="file" id="bgUpload" accept="image/*" style="display: none;">
+      </button>
+      <button id="url-change-btn" class="btn edit-btn hidden" title="Change Background" style="opacity: 0;">
+        <img width="100%" src="images/url.png">
       </button>
       <div id="home-btn" class="home-btn-wrapper" title="Home"><div class="home-btn"><img src="images/home.png" width="100%" height="100%"/></div></div>
     </div>
@@ -48,9 +54,19 @@
           </div>
         </div>
       </div>
-      <p style="    color: #A9A9A9; width: 78%; margin: 3px; display: flex; justify-content: space-between; margin-inline: auto;">
+      <p style="color: #A9A9A9; width: 78%; margin: 3px; display: flex; justify-content: space-between; margin-inline: auto;">
        <span>Windows + .(Period) for Emoji Picker</span>   <span>Image size 1080 x 1080</span>
       </p>
+
+      <div id="urlModal" class="modal">
+        <div class="modal-content">
+          <span class="urlclose">&times;</span>
+          <h2>Add Your Image URL</h2>
+          <div>
+            <input id="userUrl" placeholder="Paste a valid image URL here..." style="display: flex; width: 95%; margin: auto; padding: 10px; border: 2px solid #267ff33d; border-radius: 8px; font-size: 16px; outline: none; transition: border-color 0.3s ease; margin-block: 15px;"/>
+          </div>
+        </div>
+      </div>
 
       <div id="modal" class="modal">
         <div class="modal-content">
@@ -209,7 +225,7 @@
       <p id="lr-description">You’ve reached your <strong>daily limit</strong> of 2 cards. Please try again tomorrow.</p>
       <div class="upgrade-heading">
         <h2>UPRADE TO PREMIUM</h2>
-        <p id="showAmt">Unlock unlimited card generation for the next 4 hours by upgrading for just <strong >₹20!</strong></p>
+        <p id="showAmt">Unlock unlimited card generation for the next 4 hours by upgrading for just <strong id="currencyUpdate1">₹20!</strong></p>
       </div>
       <div class="form-container">
         <!-- Full Name Row -->
@@ -228,16 +244,16 @@
           <div class="methods">
             <img src="images/methods.jpeg" alt="payment methods" />
           </div>
-          <button id="payButton">Pay ₹20.00</button>
+          <button id="payButton" class="currencyUpdate">Pay ₹20.00</button>
         </div>
         <div id="payOptions" class="card-selector" style="border:none;">
           <div class="option">
             <input type="radio" id="pay1" name="cardFormat" value="pay1" checked>
-            <span style="display: flex; flex-direction: column; font-size: larger;"><b>4 HOURS</b><span>₹20.00</span></span>
+            <span style="display: flex; flex-direction: column; font-size: larger;"><b>4 HOURS</b><span id="currencyUpdate3">₹20.00</span></span>
           </div>
           <div class="option">
             <input type="radio" id="pay2" name="cardFormat" value="pay2">
-            <span style="display: flex; flex-direction: column; font-size: larger;"><b>24 HOURS</b><span>₹100.00</span></span>
+            <span style="display: flex; flex-direction: column; font-size: larger;"><b>24 HOURS</b><span  id="currencyUpdate4">₹100.00</span></span>
           </div>
         </div>
         <p id="statusMessage"></p>
@@ -320,7 +336,9 @@
         </div>
         <div class="dropdown">
           <label class="dropdown-label" for="colorPicker">Font Color</label>
-          <input type="color" id="colorPicker" value="#000000" style="width: 94%; height: 30px; border: 0.5px solid #267ff3; border-radius: 5px; cursor: pointer; padding: 1px 3px;">
+          <div style="display: flex; flex-direction: column;">
+            <input type="color" id="colorPicker" value="#000000" style="width: 94%; height: 30px; border: 0.5px solid #267ff3; border-radius: 5px; cursor: pointer; padding: 1px 3px;">
+          </div>
         </div>
         <div class="dropdown">
           <label class="dropdown-label" for="dropdownButton5">Font Type</label>
@@ -332,6 +350,10 @@
               <div class="dropdown-item" data-value="none">None</div>
           </div>
         </div>
+      </div>
+      <div style="margin-top: 10px;">
+        <label class="dropdown-label" for="colorPicker" style="padding-bottom: 0px;">Font Color Opacity</label>
+        <input type="range" id="colorOpacity" min="0" max="100" value="100" style="width: 100%; height: 30px; cursor: pointer;">
       </div>
       <div style="display: flex; justify-content: space-around; margin-top: 10px; width: 98%; margin-inline: auto;">
         <button id="openModal" class="light-background" style="padding: 0px; width: 30%; display: flex; justify-content: center; align-items: center;" title="Browse Template"><img src="images/template.png"/></button>
