@@ -25,8 +25,12 @@
         <img width="100%" src="images/upload.webp">
         <input type="file" id="bgUpload" accept="image/*" style="display: none;">
       </button>
-      <button id="url-change-btn" class="btn edit-btn hidden" title="Change Background" style="opacity: 0;">
-        <img width="100%" src="images/url.png">
+      <button id="url-change-btn" class="btn edit-btn hidden" title="Change Background with image URL" style="opacity: 0;">
+        <img width="100%" src="images/url.png" style="padding-top: 2px;">
+      </button>
+      <button id="overlay-change-btn" class="btn edit-btn hidden" title="Change Background with image URL" style="opacity: 0;">
+        <img width="100%" src="images/overlay.svg" style="width: 80%; padding-top: 2px;">
+        <input type="color" id="overlay-bg" value="#000000" style="position: absolute; visibility: hidden;">
       </button>
       <div id="home-btn" class="home-btn-wrapper" title="Home"><div class="home-btn"><img src="images/home.png" width="100%" height="100%"/></div></div>
     </div>
@@ -39,6 +43,7 @@
           <div style="width: 100%; height: 100%; position: absolute; top: 0px; left: 0px; z-index: 0; overflow: hidden; display: flex; align-items: center; justify-content: center; padding: 0px; margin: 0px;">
             <img src="templates/template1.png" height="100%"/>
           </div>
+          <div id="overlay" style="width: 100%; height: 100%; position: absolute; top: 0px; left: 0px;"></div>
           <div id="textContent" class="textContent">
             <div class="profile">
               <div class="profile-image">
@@ -60,11 +65,12 @@
 
       <div id="urlModal" class="modal">
         <div class="modal-content">
-          <span class="urlclose">&times;</span>
+          <span class="close">&times;</span>
           <h2>Add Your Image URL</h2>
           <div>
             <input id="userUrl" placeholder="Paste a valid image URL here..." style="display: flex; width: 95%; margin: auto; padding: 10px; border: 2px solid #267ff33d; border-radius: 8px; font-size: 16px; outline: none; transition: border-color 0.3s ease; margin-block: 15px;"/>
           </div>
+          <button id="urldone" style="width: 30%; display: block; margin: auto;">Apply</button>
         </div>
       </div>
 
@@ -350,10 +356,6 @@
               <div class="dropdown-item" data-value="none">None</div>
           </div>
         </div>
-      </div>
-      <div style="margin-top: 10px;">
-        <label class="dropdown-label" for="colorPicker" style="padding-bottom: 0px;">Font Color Opacity</label>
-        <input type="range" id="colorOpacity" min="0" max="100" value="100" style="width: 100%; height: 30px; cursor: pointer;">
       </div>
       <div style="display: flex; justify-content: space-around; margin-top: 10px; width: 98%; margin-inline: auto;">
         <button id="openModal" class="light-background" style="padding: 0px; width: 30%; display: flex; justify-content: center; align-items: center;" title="Browse Template"><img src="images/template.png"/></button>

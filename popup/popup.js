@@ -239,10 +239,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   const btnGroup = document.getElementById('btnGroup');
   const homeButton = document.getElementById("home-btn");
   const colorPicker = document.getElementById("colorPicker");
-  const opacitySlider = document.getElementById("colorOpacity");
   const randomQuoteBtn = document.getElementById('randomQuoteBtn');
   const bgChangeBtn = document.getElementById('bg-change-btn');
   const urlChangeBtn = document.getElementById('url-change-btn');
+  const overlayChangeBtn = document.getElementById("overlay-change-btn");
   const bgUpload = document.getElementById('bgUpload');
     
   const textAlignOptions = ['left', 'right', 'center'];
@@ -273,7 +273,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     name.style.color = state.color? state.color : '#000000';
     designation.style.color = state.color? state.color : '#000000';
     colorPicker.value = state.color? state.color : '#000000';
-    opacitySlider.value = state.opacity? state.opacity : 100;
+    document.getElementById('overlay').style.backgroundColor = state.overlay? state.overlay : 'rgba(0,0,0,0)';
+    document.getElementById('overlay-bg').value = state.overlay? state.overlay : 'rgb(0,0,0)';
     cardContent.querySelector('img'). src = state.backgroundImage || 'default.png';
     cardContent.className = state.template ? state.template : cardContent.className;
     profileImage.src = state.src || 'images/profile.png';
@@ -476,6 +477,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           resetButton.classList.add('hidden');
           bgChangeBtn.classList.add('hidden');
           urlChangeBtn.classList.add('hidden');
+          overlayChangeBtn.classList.add('hidden');
           editableElements.forEach((element) => {
             element.setAttribute("contenteditable", "false");
             element.style.overflow = "hidden";
@@ -486,6 +488,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           resetButton.style.opacity = 0;
           bgChangeBtn.style.opacity = 0;
           urlChangeBtn.style.opacity = 0;
+          overlayChangeBtn.style.opacity = 0;
         }
         editContainer.classList.add('hidden');
         downloadCard.classList.add('hidden');
@@ -579,6 +582,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       designation.innerText = state.designation;
       cardContent.querySelector('img'). src = state.backgroundImage || 'images/default.png';
       profileImage.src = state.image || 'images/profile.png';
+      document.getElementById('overlay').style.backgroundColor = state.overlay? state.overlay : 'rgba(0,0,0,0)'
     }
   });
 
@@ -598,26 +602,30 @@ document.addEventListener("DOMContentLoaded", async () => {
       resetButton.style.opacity = 1;
       bgChangeBtn.style.opacity = 1;
       urlChangeBtn.style.opacity = 1;
+      overlayChangeBtn.style.opacity = 1;
       resetButton.classList.remove('hidden');
       bgChangeBtn.classList.remove('hidden');
       urlChangeBtn.classList.remove('hidden');
+      overlayChangeBtn.classList.remove('hidden');
       titleElement.focus();
     } else {
       // Switch to confirm mode
       resetButton.style.opacity = 0;
       bgChangeBtn.style.opacity = 0;
       urlChangeBtn.style.opacity = 0;
+      overlayChangeBtn.style.opacity = 0;
       resetButton.classList.add('hidden');
       bgChangeBtn.classList.add('hidden');
       urlChangeBtn.classList.add('hidden');
+      overlayChangeBtn.classList.add('hidden');
       editableElements.forEach((element) => {
         element.setAttribute("contenteditable", "false");
         element.style.overflow = "hidden";
         if(element.innerHTML === '<br>') element.innerHTML = '';
       });
   
-      editBtn.innerHTML = "<img src='images/edit.png' width='100%' height='100%'/>";
-      localStorage.setItem('state', JSON.stringify({title: titleElement.innerText, name: name.innerText, designation: designation.innerText, backgroundImage: cardContent.querySelector('img'). src.replace(/^url$$["']?/, '').replace(/["']?$$$/, ''), image: profileImage.src, template: cardContent.className, color: colorPicker.value}))
+      editBtn.innerHTML = "<img src='images/edit.png' width='100%' height='100%' style='width: 15px; height: 15px;'/>";
+      localStorage.setItem('state', JSON.stringify({title: titleElement.innerText, name: name.innerText, designation: designation.innerText, backgroundImage: cardContent.querySelector('img'). src.replace(/^url$$["']?/, '').replace(/["']?$$$/, ''), image: profileImage.src, template: cardContent.className, color: titleElement.style.color, overlay: document.getElementById('overlay').style.backgroundColor}))
     }
   });
 
@@ -648,6 +656,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   document.querySelector('.close').addEventListener('click', function() {
     document.getElementById('modal').style.display = 'none';
+    document.getElementById('urlModal').style.display = 'none';
   });
 
   document.getElementById('url-change-btn').addEventListener('click', function() {
@@ -655,11 +664,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   let prevBg = cardContent.querySelector('img').src;
-  document.querySelector('.urlclose').addEventListener('click', function() {
+  document.querySelector('#urldone').addEventListener('click', function() {
     document.getElementById('urlModal').style.display = 'none';
     if(document.getElementById('userUrl').value) {
       prevBg = cardContent.querySelector('img').src
-      cardContent.querySelector('img'). src = document.getElementById('userUrl').value;
+      resizeImageToSquare(document.getElementById('userUrl').value, function(resizedImageDataUrl) {
+        cardContent.querySelector('img').src = resizedImageDataUrl;
+    });
     } else {
       cardContent.querySelector('img'). src = prevBg
     }
@@ -792,25 +803,24 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   });
 
-  colorPicker.addEventListener('change', () => {
+  colorPicker.addEventListener('input', () => {
     const hex = colorPicker.value;
-    const opacity = opacitySlider.value / 100; // Convert to 0-1 range
+    const opacity = 1; // Convert to 0-1 range
     const { r, g, b } = hexToRgb(hex);
     const rgbaValue = `rgba(${r}, ${g}, ${b}, ${opacity})`;
     titleElement.style.color = rgbaValue || '#000000';
     name.style.color = rgbaValue || '#000000';
     designation.style.color = rgbaValue || '#000000';
-    localStorage.setItem('state', JSON.stringify({title: titleElement.innerText, name: name.innerText, designation: designation.innerText, backgroundImage: cardContent.querySelector('img'). src.replace(/^url$$["']?/, '').replace(/["']?$$$/, ''), image: profileImage.src, template: cardContent.className, color: rgbaValue, opacity: opacitySlider.value}))
   })
-  opacitySlider.addEventListener('change', () => {
-    const hex = colorPicker.value;
-    const opacity = opacitySlider.value / 100; // Convert to 0-1 range
+  overlayChangeBtn.addEventListener("click", function () {
+    document.getElementById("overlay-bg").click();
+  });
+  document.getElementById('overlay-bg').addEventListener('input', () => {
+    const hex = document.getElementById('overlay-bg').value;
+    const opacity = 0.5; // Convert to 0-1 range
     const { r, g, b } = hexToRgb(hex);
     const rgbaValue = `rgba(${r}, ${g}, ${b}, ${opacity})`;
-    titleElement.style.color = rgbaValue || '#000000';
-    name.style.color = rgbaValue || '#000000';
-    designation.style.color = rgbaValue || '#000000';
-    localStorage.setItem('state', JSON.stringify({title: titleElement.innerText, name: name.innerText, designation: designation.innerText, backgroundImage: cardContent.querySelector('img'). src.replace(/^url$$["']?/, '').replace(/["']?$$$/, ''), image: profileImage.src, template: cardContent.className, color: rgbaValue, opacity: opacitySlider.value}))
+    document.getElementById('overlay').style.backgroundColor = rgbaValue
   })
 
   randomQuoteBtn.addEventListener('click', () => {
@@ -835,17 +845,17 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 // Disable right-click
-// document.addEventListener("contextmenu", (event) => event.preventDefault());
+document.addEventListener("contextmenu", (event) => event.preventDefault());
 
-// // Disable specific keyboard shortcuts
-// document.addEventListener("keydown", (event) => {
-//   if (
-//     event.key === "F12" || // F12
-//     (event.ctrlKey && event.shiftKey && event.key === "I") || // Ctrl+Shift+I
-//     (event.ctrlKey && event.shiftKey && event.key === "J") || // Ctrl+Shift+J
-//     (event.ctrlKey && event.key === "U") // Ctrl+U (View Source)
-//   ) {
-//     event.preventDefault();
-//   }
-// });
+// Disable specific keyboard shortcuts
+document.addEventListener("keydown", (event) => {
+  if (
+    event.key === "F12" || // F12
+    (event.ctrlKey && event.shiftKey && event.key === "I") || // Ctrl+Shift+I
+    (event.ctrlKey && event.shiftKey && event.key === "J") || // Ctrl+Shift+J
+    (event.ctrlKey && event.key === "U") // Ctrl+U (View Source)
+  ) {
+    event.preventDefault();
+  }
+});
 
