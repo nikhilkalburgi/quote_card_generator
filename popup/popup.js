@@ -491,9 +491,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       const fullName = document.getElementById('fullName').value.trim();
       const email = document.getElementById('email').value.trim();
       const contact = document.getElementById('contact').value.trim();
-      // const paymentResponse = await razorpayPaymentGateway(fullName, email, contact, document.getElementById('pay1').checked ? 2000 : 10000, country);
+      const paymentResponse = await razorpayPaymentGateway(fullName, email, contact, document.getElementById('pay1').checked ? 2000 : 10000, country);
       
-      if (true) {
+      if (paymentResponse.success) {
         const usageData = JSON.parse(localStorage.getItem('usage')) || {};
         usageData.date = today;
         usageData.unlimited = true; // Unlimited access flag
