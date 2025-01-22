@@ -259,6 +259,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   const options = { hour: 'numeric', minute: '2-digit', hour12: true, day: 'numeric', month: 'short', year: 'numeric' };
 
   const state = JSON.parse(localStorage.getItem('state')) || null;
+  const userInfo = JSON.parse(localStorage.getItem('user')) || null;
+
   if(state) {
     titleElement.classList.remove('hidden');
     name.classList.remove('hidden');
@@ -306,7 +308,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     country = "India";
   }
 
-  upgradeComponent.children[0].innerHTML = 'Generate up to 2 news cards for FREE!';
+  upgradeComponent.children[0].innerHTML = 'Generate up to 2 news cards for <strong>FREE!</strong>';
   if(country === 'India') {
     upgradeComponent.children[1].innerHTML = `<a href="#" id="link" class="link">Upgrade</a> for just ₹20/- and enjoy unlimited access for the next 4 hours!`;
     document.getElementById('currencyUpdate1').innerText = '₹20!';
@@ -320,7 +322,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById('currencyUpdate3').innerText = '$1.00';
     document.getElementById('currencyUpdate4').innerText = '$5.00';
   }
-
 
   if (timeDifference < (usageData.expiry ?? 4) && usageData.unlimited) {
     const expiryTime = new Date(new Date(usageData.date).getTime() + (usageData.expiry ?? 4) * 60 * 60 * 1000).toLocaleString('en-US', options);
@@ -364,9 +365,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     const currentTime = new Date();
     const timeDifference = (currentTime - lastCheckTime) / (1000 * 60 * 60); // Convert milliseconds to hours
   
-    if (timeDifference >= 8) {
+    if (timeDifference > (usageData.expiry ?? 4)) {
       usageData.unlimited = false;
-      upgradeComponent.children[0].innerHTML = 'Generate up to 2 news cards for FREE!';
+      upgradeComponent.children[0].innerHTML = 'Generate up to 2 news cards for <strong>FREE!</strong>';
       upgradeComponent.children[1].innerHTML = `<a href="#" id="link" class="link">Upgrade</a> for just ${(country === 'India')? '₹20':'$1'}/- and enjoy unlimited access for the next 4 hours!`;
     }
     
@@ -394,15 +395,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         resizeImageToSquare(imageUrl, function(resizedImageDataUrl) {
           cardContent.querySelector('img'). src = resizedImageDataUrl;
           titleElement.innerText = userInput.value;
-          name.innerText = "Akhilesh";
-          designation.innerText = "Founder at QuoteMaker";
+          name.innerText = userInfo?.name || "Akhilesh";
+          designation.innerText = userInfo?.designation || "Founder at QuoteMaker";
           loader.classList.add('hidden');
           cardContent.classList.remove('hidden');
           btnGroup.classList.remove('hidden');
           editContainer.classList.remove('hidden');
           downloadCard.classList.remove('hidden');
           // Update usage data
-          if (new Date(usageData.date).toDateString() !== new Date(today).toDateString() ) {
+          if (new Date(usageData.date).toDateString() !== new Date(today).toDateString() && (usageData.expiry? timeDifference > (usageData.expiry) : true)) {
             // Reset usage for a new day
             usageData.date = today;
             usageData.clicks = 0;
@@ -423,7 +424,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       editContainer.classList.remove('hidden');
       downloadCard.classList.remove('hidden');
       // Update usage data
-      if (new Date(usageData.date).toDateString() !== new Date(today).toDateString() ) {
+      if (new Date(usageData.date).toDateString() !== new Date(today).toDateString() && (usageData.expiry? timeDifference > (usageData.expiry) : true) ) {
         // Reset usage for a new day
         usageData.date = today;
         usageData.clicks = 0;
@@ -469,39 +470,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         link.download = 'quote-card.png';
         link.click();
 
-        card.classList.add('hidden');
-        cardContent.classList.add('hidden');
-        btnGroup.classList.add('hidden');
-        if(editButton.textContent === "✔") {
-          const editableElements = cardContent.querySelectorAll("h1, p");
-          resetButton.classList.add('hidden');
-          bgChangeBtn.classList.add('hidden');
-          urlChangeBtn.classList.add('hidden');
-          overlayChangeBtn.classList.add('hidden');
-          editableElements.forEach((element) => {
-            element.setAttribute("contenteditable", "false");
-            element.style.overflow = "hidden";
-            if(element.innerHTML === '<br>') element.innerHTML = '';
-          });
-      
-          editButton.innerHTML = "<img src='images/edit.png' width='100%' height='100%'/>";
-          resetButton.style.opacity = 0;
-          bgChangeBtn.style.opacity = 0;
-          urlChangeBtn.style.opacity = 0;
-          overlayChangeBtn.style.opacity = 0;
-        }
-        editContainer.classList.add('hidden');
-        downloadCard.classList.add('hidden');
-        loader.classList.remove('hidden');
-        generateCardBtn.classList.remove('hidden');
-        userInput.classList.remove('hidden');
-        randomQuoteBtn.classList.remove('hidden');
-        name.style.removeProperty('color');
-        designation.style.removeProperty('color');
-        titleElement.style.removeProperty('color');
-        colorPicker.value = '#000000'
-        localStorage.removeItem('state');
-
     }).catch(error => {
         console.error('Error capturing the card:', error);
     });
@@ -523,9 +491,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       const fullName = document.getElementById('fullName').value.trim();
       const email = document.getElementById('email').value.trim();
       const contact = document.getElementById('contact').value.trim();
-      const paymentResponse = await razorpayPaymentGateway(fullName, email, contact, document.getElementById('pay1').checked ? 2000 : 10000, country);
+      // const paymentResponse = await razorpayPaymentGateway(fullName, email, contact, document.getElementById('pay1').checked ? 2000 : 10000, country);
       
-      if (paymentResponse.success) {
+      if (true) {
         const usageData = JSON.parse(localStorage.getItem('usage')) || {};
         usageData.date = today;
         usageData.unlimited = true; // Unlimited access flag
@@ -561,10 +529,16 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   closeButton.addEventListener("click", () => {
+    const state = JSON.parse(localStorage.getItem('state')) || null;
+    if(state)
+    localStorage.setItem('user', JSON.stringify({name: state?.name, designation: state?.designation}));
     localStorage.removeItem('state');
     window.close(); // Closes the popup window
   });
   homeButton.addEventListener("click", () => {
+    const state = JSON.parse(localStorage.getItem('state')) || null;
+    if(state)
+    localStorage.setItem('user', JSON.stringify({name: state?.name, designation: state?.designation}));
     localStorage.removeItem('state');
     try {
       window.location.reload(); // reloads the popup window
