@@ -279,7 +279,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById('overlay-bg').value = state.overlay? state.overlay : 'rgb(0,0,0)';
     cardContent.querySelector('img'). src = state.backgroundImage || 'default.png';
     cardContent.className = state.template ? state.template : cardContent.className;
-    profileImage.src = state.src || 'images/profile.png';
+    profileImage.src = state.image || 'images/profile.png';
     titleElement.style.fontSize = state.fontSize? state.fontSize : titleElement.style.fontSize;
     titleElement.style.textAlign = state.textAlign? state.textAlign : titleElement.style.textAlign;
     titleElement.style.fontFamily = state.fontFamily? state.fontFamily : titleElement.style.fontFamily;
@@ -397,6 +397,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           titleElement.innerText = userInput.value;
           name.innerText = userInfo?.name || "Akhilesh";
           designation.innerText = userInfo?.designation || "Founder at QuoteMaker";
+          profileImage.src = state?.image || userInfo?.image || 'images/profile.png';
           loader.classList.add('hidden');
           cardContent.classList.remove('hidden');
           btnGroup.classList.remove('hidden');
@@ -416,8 +417,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     })
     .catch(error => {
       titleElement.innerText = userInput.value;
-      name.innerText = "Akhilesh";
-      designation.innerText = "Founder at QuoteMaker";
+      name.innerText = userInfo?.name || "Akhilesh";
+      designation.innerText = userInfo?.designation || "Founder at QuoteMaker";
+      profileImage.src = state?.image || userInfo?.image || 'images/profile.png';
       loader.classList.add('hidden');
       cardContent.classList.remove('hidden');
       btnGroup.classList.remove('hidden');
@@ -531,14 +533,14 @@ document.addEventListener("DOMContentLoaded", async () => {
   closeButton.addEventListener("click", () => {
     const state = JSON.parse(localStorage.getItem('state')) || null;
     if(state)
-    localStorage.setItem('user', JSON.stringify({name: state?.name, designation: state?.designation}));
+    localStorage.setItem('user', JSON.stringify({name: state?.name, designation: state?.designation, image: state?.image}));
     localStorage.removeItem('state');
     window.close(); // Closes the popup window
   });
   homeButton.addEventListener("click", () => {
     const state = JSON.parse(localStorage.getItem('state')) || null;
     if(state)
-    localStorage.setItem('user', JSON.stringify({name: state?.name, designation: state?.designation}));
+    localStorage.setItem('user', JSON.stringify({name: state?.name, designation: state?.designation, image: state?.image}));
     localStorage.removeItem('state');
     try {
       window.location.reload(); // reloads the popup window
@@ -701,7 +703,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           resizeImageToSquare(e.target.result, (resizedImageDataUrl) => {
             profileImage.src = resizedImageDataUrl;
             prevImage = resizedImageDataUrl;
-            localStorage.setItem('state', JSON.stringify({title: titleElement.innerText, name: name.innerText, designation: designation.innerText, backgroundImage: resizedImageDataUrl, image: profileImage.src, template: cardContent.className, color: colorPicker.value}))
+            localStorage.setItem('state', JSON.stringify({title: titleElement.innerText, name: name.innerText, designation: designation.innerText, backgroundImage: cardContent.querySelector('img'). src, image: profileImage.src, template: cardContent.className, color: colorPicker.value}))
           })
         };
         reader.readAsDataURL(file);
