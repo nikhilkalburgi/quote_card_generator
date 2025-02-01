@@ -228,6 +228,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const downloadCard = document.getElementById('downloadCard');
   const upgradeComponent = document.getElementById('upgradeComponent');
   const userInput = document.getElementById('userInput');
+  const pastBtn = document.getElementById('pasteBtn');
   const profileImage = document.getElementById('profileImage');
   const randomize = document.getElementById('randomize');
   const uploadImage = document.getElementById('imageUpload');
@@ -267,6 +268,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     designation.classList.remove('hidden');
     generateCardBtn.classList.add('hidden');
     userInput.classList.add('hidden');
+    pastBtn.classList.add('hidden');
     randomQuoteBtn.classList.add('hidden');
     titleElement.innerText = state.title;
     name.innerText = state.name || 'Akhilesh';
@@ -349,6 +351,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     editButton.querySelector('img').src = 'images/edit.png';
     generateCardBtn.classList.add('hidden');
     userInput.classList.add('hidden');
+    pastBtn.classList.add('hidden');
     randomQuoteBtn.classList.add('hidden');
    
     if(!cardContent.classList.contains('hidden')) {
@@ -509,6 +512,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         editButton.style.background = '#eaf3fe';
         generateCardBtn.classList.remove('hidden');
         userInput.classList.remove('hidden');
+        pastBtn.classList.remove('hidden');
         randomQuoteBtn.classList.remove('hidden');
         upgradeComponent.children[0].innerHTML = '<strong>Thank you for upgrading!</strong>'
         upgradeComponent.children[1].innerHTML = `Your premium access will expire at <strong>${expiryTime}</strong>. <p style="font-size:14px; margin:0px; padding:0px;">Enjoy unlimited card generation until then!</p>`
@@ -614,6 +618,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     upgradeComponent.classList.add('hidden');
     generateCardBtn.classList.add('hidden');
     userInput.classList.add('hidden');
+    pastBtn.classList.add('hidden');
     randomQuoteBtn.classList.add('hidden');
     quota.classList.remove('hidden');
     editContainer.classList.remove('hidden');
